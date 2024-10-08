@@ -2,6 +2,7 @@ import sys
 from models.validacao_entrada_dados import validacao_opcoes_menu
 from models.procedimentos_menu import voltar_menu, limpar_terminal
 from models.funcoes_menu import registrar_transporte, consultar_status_transporte, consultar_todos_transportes
+from models.funcoes_dataBase import conexao_banco_de_dados
 
 
 def menu() -> None:
@@ -44,8 +45,14 @@ def opcoes_menu() -> None:
 
 
 def main():
-    limpar_terminal()
-    opcoes_menu()
+    conexao_db = conexao_banco_de_dados()
+
+    if conexao_db:
+        opcoes_menu()
+    else:
+        input('⚠️   Verifique a conexão com o banco de dados e tente novamente.')
+        limpar_terminal()
+        sys.exit()
 
 
 if __name__ == "__main__":
