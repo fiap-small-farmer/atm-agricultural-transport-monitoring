@@ -1,0 +1,207 @@
+from models.procedimentos_menu import limpar_tela_e_exibir_titulo
+from models.validacao_entrada_dados import validacao_opcoes_menu
+import requests
+
+
+def exibicao_e_selecao_categoria(dados_categoria_produto: dict) -> dict:
+    # Cria uma lista de categorias de produtos para seleção
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+    print('Selecione uma categoria:\n')
+
+    # Cria uma lista em ordem alfabética das categorias
+    categorias = sorted(dados_categoria_produto.keys())
+
+    # Exibi a lista das categorias agro
+    for index, categoria in enumerate(categorias):
+        print(f'{index:2} - {categoria.replace("_", " ").upper()}')
+
+    # Captura a seleção da categoria com validação
+    while True:
+        # Valida se a opção é um dígito
+        selecao_categoria = validacao_opcoes_menu()
+
+        # Verifica se a seleção está dentro do intervalo válido
+        if 0 <= selecao_categoria < len(categorias):
+            selecao_categoria = categorias[selecao_categoria]
+            break
+        else:
+            print('\n⚠️   Seleção fora do intervalo, tente novamente.')
+
+    # Armazena os produtos baseado na categoria selecionada
+    itens_selecao_categoria = dados_categoria_produto.get(selecao_categoria)
+
+    return itens_selecao_categoria
+
+
+def exibicao_e_selecao_produtos(produtos_selecao_categoria: dict) -> dict:
+    # Cria uma lista de produtos da categoria selecionada
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+    print('Selecione um produto:\n')
+
+    # Cria uma lista em ordem alfabética dos produtos da categoria selecionada
+    produtos = sorted(produtos_selecao_categoria)
+
+    # Exibi a lista dos produtos agro
+    for index, produto in enumerate(produtos):
+        print(f'{index:2} - {produto.replace("_", " ").upper()}')
+
+    # Captura a seleção do produto com validação
+    while True:
+        # Valida se a opção é um dígito
+        selecao_produto = validacao_opcoes_menu()
+
+        # Verifica se a seleção está dentro do intervalo válido
+        if 0 <= selecao_produto < len(produtos):
+            selecao_produto = produtos[selecao_produto]
+            break
+        else:
+            print('\n⚠️   Seleção fora do intervalo, tente novamente.')
+
+    # Armazena os itens do produto baseado na seleção em um dict com o nome do produto
+    selecao_produto = {
+        selecao_produto: produtos_selecao_categoria.get(selecao_produto)
+    }
+
+    return selecao_produto
+
+
+def quantidade_para_transporte(produto: dict) -> int:
+    # Busca dentro do dicionario de produto selecionado a unidade de transporte
+    for key, value in produto.items():
+        unidade_transporte = value['unidade_transporte']
+        nome_produto = key
+
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+
+    # Valida e captura o valor da quantidade exibindo sua respectiva unidade
+    try:
+        quantidade_item_para_transporte = int(
+            input(f'Informe a quantidade de {nome_produto.replace("_", " ").upper()} para transporte em sua unidade  ☛  {unidade_transporte.upper()}: '))
+
+    except:
+        while True:
+            quantidade_item_para_transporte = input(
+                '\n⚠️   Digite uma opção válida: ')
+
+            if quantidade_item_para_transporte.isdigit():
+                quantidade_item_para_transporte = int(
+                    quantidade_item_para_transporte)
+                break
+
+            else:
+                print('\n🚫  Por favor, insira apenas dígitos.')
+
+    return quantidade_item_para_transporte
+
+
+def busca_cep(cep: str) -> dict:
+    # URL da API via cep para requisição
+    url = f'https://viacep.com.br/ws/{cep}/json/'
+
+    # Valida a requisição, se nao houver erro retorna o dicionario com os dados da localização
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        endereco = response.json()
+
+        if 'erro' in endereco:
+            return None
+
+        return endereco
+
+    # Se ocorrer erro de requisição exibi o erro em tela para tratamento
+    except Exception as error:
+        print(f'\nOcorreu um erro ao consultar o CEP: {error}')
+        return None
+
+
+def solicitar_e_exibir_cep(tipo: str) -> dict:
+    # Solicita o CEP até que um válido seja fornecido, encontrado e confirmado
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+
+    # Loop para confirmar se a localização está correta
+    while True:
+        cep = input(f'Informe o CEP de {tipo} (8 dígitos): ')
+
+        # Verifica se o cep digitado tem 8 dígitos e é somente digito
+        if cep.isdigit() and len(cep) == 8:
+            endereco = busca_cep(cep)
+
+            # Verifica se o retorno da API via cep localizou o cep digitado
+            if endereco:
+                print(f'\nLocalização encontrada:\n')
+                print(f'CEP: {endereco["cep"]}')
+                print(f'Endereço: {endereco["logradouro"]}')
+                print(f'Bairro: {endereco["bairro"]}')
+                print(f'Cidade: {endereco["localidade"]}')
+                print(f'Estado: {endereco["uf"]}')
+
+                # Validação para confirmar se o cep encontrado é o correto
+                while True:
+                    confirmacao = input(
+                        '\nO endereço está correto? (S/N): ').strip().upper()
+
+                    if confirmacao == 'S':
+                        endereco = {
+                            'cep': endereco["cep"],
+                            'endereco': endereco["logradouro"],
+                            'bairro': endereco["bairro"],
+                            'cidade': endereco["localidade"],
+                            'estado': endereco["uf"]
+                        }
+
+                        return endereco
+
+                    elif confirmacao == 'N':
+                        print(
+                            '\n⚠️   Por favor, tente novamente com um CEP correto.\n')
+                        break
+                    else:
+                        print('\n🚫  Por favor, insira S para sim ou N para não.')
+
+                if confirmacao == 'S':
+                    break
+
+            else:
+                print('\n🚫  CEP não encontrado. Por favor, insira um CEP válido.\n')
+
+        else:
+            print('\n🚫  Por favor, insira um CEP válido com 8 dígitos apenas.\n')
+
+
+def numero_endereco_localizacao() -> int:
+    try:
+        numero_endereco = int(input(f'\nInforme o número do endereço: '))
+
+    except:
+        while True:
+            numero_endereco = input('\n⚠️   Digite uma opção válida: ')
+
+            if numero_endereco.isdigit():
+                numero_endereco = int(numero_endereco)
+                break
+            else:
+                print('\n🚫  Por favor, insira apenas dígitos.')
+
+    return numero_endereco
+
+
+def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
+    # Solicita o CEP até que um válido seja fornecido, encontrado e confirmado
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+
+    # Captura e valida o nome do produtor
+    while True:
+        nome_produtor = input(f'Informe o nome d{'a' if tipo == 'PRODUTORA' else 'o'} {
+                              tipo} AGRÍCOLA: ').strip()
+
+        # Verifica se o nome está vazio
+        if not nome_produtor:
+            print('\n🚫  O nome não pode estar vazio. Por favor, insira um nome válido.')
+
+        # Verifica se o nome tem mais de 10 caracteres
+        elif len(nome_produtor) > 30:
+            print('\n🚫  O nome não pode ter mais que 10 caracteres.')
+
+        else:
+            return nome_produtor

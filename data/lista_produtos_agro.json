@@ -1,0 +1,258 @@
+{
+    "grãos_e_cereais": {
+        "soja": {
+            "min": 10,
+            "max": 15,
+            "instruções": "em ambientes secos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "milho": {
+            "min": 10,
+            "max": 15,
+            "instruções": "em ambientes secos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "arroz": {
+            "min": 15,
+            "max": 20,
+            "instruções": "em ambientes secos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "trigo": {
+            "min": 10,
+            "max": 20,
+            "instruções": "em ambientes secos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "feijao": {
+            "min": 15,
+            "max": 20,
+            "instruções": "evitar umidade",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        }
+    },
+    "oleaginosas": {
+        "algodão": {
+            "min": 10,
+            "max": 25,
+            "instruções": "ambientes secos e arejados",
+            "unidade_transporte": "fardos",
+            "tipo_caminhao": "baú"
+        },
+        "amendoim": {
+            "min": 5,
+            "max": 15,
+            "instruções": "para evitar a rancificação do óleo",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "girassol": {
+            "min": 5,
+            "max": 10,
+            "instruções": "em locais secos para evitar proliferação de fungos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        }
+    },
+    "frutas": {
+        "laranja": {
+            "min": 3,
+            "max": 7,
+            "instruções": "controle de umidade para evitar mofo",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        },
+        "banana": {
+            "min": 13,
+            "max": 15,
+            "instruções": "nunca refrigerar para evitar escurecimento",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "baú"
+        },
+        "mamão": {
+            "min": 7,
+            "max": 10,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "baú"
+        },
+        "manga": {
+            "min": 10,
+            "max": 13,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "baú"
+        },
+        "melancia": {
+            "min": 7,
+            "max": 10,
+            "instruções": "",
+            "unidade_transporte": "unidades",
+            "tipo_caminhao": "baú"
+        },
+        "uva": {
+            "min": 0,
+            "max": 2,
+            "instruções": "evitar alta umidade",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        },
+        "maça": {
+            "min": 0,
+            "max": 4,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        }
+    },
+    "café": {
+        "café_verde": {
+            "min": 10,
+            "max": 15,
+            "instruções": "em local seco e arejado para evitar umidade",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "graneleiro"
+        },
+        "café_torrado": {
+            "min": 15,
+            "max": 25,
+            "instruções": "ambiente seco e protegido da luz",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "baú"
+        }
+    },
+    "cana_de_açúcar": {
+        "cana": {
+            "min": null,
+            "max": null,
+            "instruções": "transportar rapidamente após a colheita para evitar perda de sacarose",
+            "unidade_transporte": "toneladas",
+            "tipo_caminhao": "graneleiro"
+        }
+    },
+    "pecuária": {
+        "carne_bovina": {
+            "min": -1,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "kg",
+            "tipo_caminhao": "refrigerado"
+        },
+        "carne_suina": {
+            "min": -1,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "kg",
+            "tipo_caminhao": "refrigerado"
+        },
+        "carne_aves": {
+            "min": -1,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "kg",
+            "tipo_caminhao": "refrigerado"
+        },
+        "leite_cru": {
+            "min": 1,
+            "max": 4,
+            "instruções": "",
+            "unidade_transporte": "litros",
+            "tipo_caminhao": "refrigerado"
+        },
+        "laticinios": {
+            "min": 2,
+            "max": 8,
+            "instruções": "depende do tipo de produto",
+            "unidade_transporte": "litros",
+            "tipo_caminhao": "refrigerado"
+        }
+    },
+    "produtos_florestais": {
+        "celulose_papel": {
+            "min": null,
+            "max": null,
+            "instruções": "não requer temperatura específica, mas evitar umidade",
+            "unidade_transporte": "fardos",
+            "tipo_caminhao": "baú"
+        },
+        "madeira": {
+            "min": null,
+            "max": null,
+            "instruções": "evitar ambientes úmidos para prevenir apodrecimento",
+            "unidade_transporte": "toneladas",
+            "tipo_caminhao": "graneleiro"
+        }
+    },
+    "legumes_e_hortaliças": {
+        "tomate": {
+            "min": 12,
+            "max": 15,
+            "instruções": "não refrigerar, pois o frio prejudica o sabor",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "baú"
+        },
+        "batata": {
+            "min": 7,
+            "max": 10,
+            "instruções": "",
+            "unidade_transporte": "sacos",
+            "tipo_caminhao": "baú"
+        },
+        "cenoura": {
+            "min": 0,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        },
+        "cebola_alho": {
+            "min": 0,
+            "max": 5,
+            "instruções": "em ambiente seco",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "baú"
+        },
+        "folhosas": {
+            "min": 0,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        },
+        "brócolis_couve_flor": {
+            "min": 0,
+            "max": 2,
+            "instruções": "",
+            "unidade_transporte": "caixas",
+            "tipo_caminhao": "refrigerado"
+        }
+    },
+    "outros_produtos": {
+        "tabaco": {
+            "min": 15,
+            "max": 25,
+            "instruções": "manter seco para evitar proliferação de fungos",
+            "unidade_transporte": "fardos",
+            "tipo_caminhao": "baú"
+        },
+        "cacau": {
+            "min": 10,
+            "max": 15,
+            "instruções": "em locais ventilados e secos",
+            "unidade_transporte": "sacas",
+            "tipo_caminhao": "baú"
+        },
+        "mel": {
+            "min": 10,
+            "max": 20,
+            "instruções": "não refrigerar",
+            "unidade_transporte": "litros",
+            "tipo_caminhao": "baú"
+        }
+    }
+}
