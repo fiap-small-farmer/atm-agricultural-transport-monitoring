@@ -1,5 +1,5 @@
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
-from models.validacao_entrada_dados import validacao_opcoes_menu
+from models.validacao_entrada_dados import validacao_opcoes_menu, verificar_valores_nulos
 import requests
 import pandas as pd
 
@@ -224,11 +224,16 @@ def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
 
 
 def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
+    # Limpa e ajusta os valores nulos
+    produto = verificar_valores_nulos(produto)
+    origem = verificar_valores_nulos(origem)
+    destino = verificar_valores_nulos(destino)
+
     limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
 
     # Dados de entrada do produto
     produto_data = {
-        'Parâmetro': ['PRODUTO', 'QUANTIDADE', 'UNIDADE DE TRANSPORTE', 'TEMPERATURA MÍNIMA ºC', 'TEMPERATURA MÁXIMA ºC', 'INSTRUÇÕES','TIPO DE CAMINHÃO'],
+        'Parâmetro': ['Produto', 'Quantidade', 'Unidade de Transporte', 'Temperatura Mínima ºc', 'Temperatura Máxima ºc', 'Instruções', 'Tipo de Caminhão'],
         'Valor': [
             produto.get('produto', 'N/A'),
             produto.get('quantidade', 'N/A'),
@@ -242,7 +247,7 @@ def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
 
     # Dados de origem (produtora)
     produtora_data = {
-        'Parâmetro': ['NOME DA PRODUTORA', 'CEP', 'ENDEREÇO', 'NÚMERO', 'BAIRRO', 'CIDADE', 'ESTADO'],
+        'Parâmetro': ['Nome da produtora', 'CEP', 'Endereço', 'Número', 'Bairro', 'Cidade', 'Estado'],
         'Valor': [
             origem.get('nome_produtora_agricola', 'N/A'),
             origem.get('localizacao', {}).get('cep', 'N/A'),
@@ -256,7 +261,7 @@ def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
 
     # Dados de destino (comprador)
     comprador_data = {
-        'Parâmetro': ['NOME DO COMPRADOR', 'CEP', 'ENDEREÇO', 'NÚMERO', 'BAIRRO', 'CIDADE', 'ESTADO'],
+        'Parâmetro': ['Nome do comprador', 'CEP', 'Endereço', 'Número', 'Bairro', 'Cidade', 'Estado'],
         'Valor': [
             destino.get('nome_comprador_agricola', 'N/A'),
             destino.get('localizacao', {}).get('cep', 'N/A'),
@@ -277,11 +282,11 @@ def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
     pd.set_option('display.width', 500)
 
     # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
-    print("📃 DADOS PRODUTO:\n")
+    print("📝 DADOS PRODUTO:\n")
     for index, row in produto_df.iterrows():
         print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
 
-    print("\n📑 DADOS ORIGEM:\n")
+    print("\n📝 DADOS ORIGEM:\n")
     for index, row in produtora_df.iterrows():
         print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
 
