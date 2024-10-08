@@ -1,6 +1,7 @@
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
 from models.validacao_entrada_dados import validacao_opcoes_menu
 import requests
+import pandas as pd
 
 
 def exibicao_e_selecao_categoria(dados_categoria_produto: dict) -> dict:
@@ -66,10 +67,9 @@ def exibicao_e_selecao_produtos(produtos_selecao_categoria: dict) -> dict:
 
 
 def quantidade_para_transporte(produto: dict) -> int:
-    # Busca dentro do dicionario de produto selecionado a unidade de transporte
-    for key, value in produto.items():
-        unidade_transporte = value['unidade_transporte']
-        nome_produto = key
+    # Captura dentro do dicionario o produto e a unidade de transporte
+    nome_produto = produto.get('produto')
+    unidade_transporte = produto.get('unidade_transporte')
 
     limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
 
@@ -129,12 +129,28 @@ def solicitar_e_exibir_cep(tipo: str) -> dict:
 
             # Verifica se o retorno da API via cep localizou o cep digitado
             if endereco:
-                print(f'\nLocalização encontrada:\n')
-                print(f'CEP: {endereco["cep"]}')
-                print(f'Endereço: {endereco["logradouro"]}')
-                print(f'Bairro: {endereco["bairro"]}')
-                print(f'Cidade: {endereco["localidade"]}')
-                print(f'Estado: {endereco["uf"]}')
+                # Dados de entrada do endereco
+                endereco_data = {
+                    'Parâmetro': ['CEP', 'ENDEREÇO', 'BAIRRO', 'CIDADE', 'ESTADO'],
+                    'Valor': [
+                        endereco.get('cep', 'N/A'),
+                        endereco.get('logradouro', 'N/A'),
+                        endereco.get('bairro', 'N/A'),
+                        endereco.get('localidade', 'N/A'),
+                        endereco.get('uf', 'N/A')
+                    ]
+                }
+
+                # Estruturando os dados com pandas
+                endereco_df = pd.DataFrame(endereco_data)
+
+                # Ajustar a largura para exibição completa
+                pd.set_option('display.width', 500)
+
+                # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
+                print("\n🗺️   LOCALIZAÇÃO PARA CONFIRMAÇÃO:\n")
+                for index, row in endereco_df.iterrows():
+                    print(f"{row['Parâmetro']:<15} {row['Valor']:<15}")
 
                 # Validação para confirmar se o cep encontrado é o correto
                 while True:
@@ -205,3 +221,70 @@ def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
 
         else:
             return nome_produtor
+
+
+def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
+    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
+
+    # Dados de entrada do produto
+    produto_data = {
+        'Parâmetro': ['PRODUTO', 'QUANTIDADE', 'UNIDADE DE TRANSPORTE', 'TEMPERATURA MÍNIMA ºC', 'TEMPERATURA MÁXIMA ºC', 'INSTRUÇÕES','TIPO DE CAMINHÃO'],
+        'Valor': [
+            produto.get('produto', 'N/A'),
+            produto.get('quantidade', 'N/A'),
+            produto.get('unidade_transporte', 'N/A'),
+            produto.get('min', 'N/A'),
+            produto.get('max', 'N/A'),
+            produto.get('instruções', 'N/A'),
+            produto.get('tipo_caminhao', 'N/A')
+        ]
+    }
+
+    # Dados de origem (produtora)
+    produtora_data = {
+        'Parâmetro': ['NOME DA PRODUTORA', 'CEP', 'ENDEREÇO', 'NÚMERO', 'BAIRRO', 'CIDADE', 'ESTADO'],
+        'Valor': [
+            origem.get('nome_produtora_agricola', 'N/A'),
+            origem.get('localizacao', {}).get('cep', 'N/A'),
+            origem.get('localizacao', {}).get('endereco', 'N/A'),
+            origem.get('localizacao', {}).get('numero', 'N/A'),
+            origem.get('localizacao', {}).get('bairro', 'N/A'),
+            origem.get('localizacao', {}).get('cidade', 'N/A'),
+            origem.get('localizacao', {}).get('estado', 'N/A')
+        ]
+    }
+
+    # Dados de destino (comprador)
+    comprador_data = {
+        'Parâmetro': ['NOME DO COMPRADOR', 'CEP', 'ENDEREÇO', 'NÚMERO', 'BAIRRO', 'CIDADE', 'ESTADO'],
+        'Valor': [
+            destino.get('nome_comprador_agricola', 'N/A'),
+            destino.get('localizacao', {}).get('cep', 'N/A'),
+            destino.get('localizacao', {}).get('endereco', 'N/A'),
+            destino.get('localizacao', {}).get('numero', 'N/A'),
+            destino.get('localizacao', {}).get('bairro', 'N/A'),
+            destino.get('localizacao', {}).get('cidade', 'N/A'),
+            destino.get('localizacao', {}).get('estado', 'N/A')
+        ]
+    }
+
+    # Estruturando os dados com pandas
+    produto_df = pd.DataFrame(produto_data)
+    produtora_df = pd.DataFrame(produtora_data)
+    comprador_df = pd.DataFrame(comprador_data)
+
+    # Ajustar a largura para exibição completa
+    pd.set_option('display.width', 500)
+
+    # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
+    print("📃 DADOS PRODUTO:\n")
+    for index, row in produto_df.iterrows():
+        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
+
+    print("\n📑 DADOS ORIGEM:\n")
+    for index, row in produtora_df.iterrows():
+        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
+
+    print("\n📝 DADOS DESTINO:\n")
+    for index, row in comprador_df.iterrows():
+        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")

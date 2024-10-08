@@ -1,7 +1,7 @@
 import json
 import os
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
-from models.funcoes_registrar_transporte import exibicao_e_selecao_categoria, exibicao_e_selecao_produtos, quantidade_para_transporte, solicitar_e_exibir_cep, dados_produtora_ou_comprador_agricola, numero_endereco_localizacao
+from models.funcoes_registrar_transporte import exibicao_e_selecao_categoria, exibicao_e_selecao_produtos, quantidade_para_transporte, solicitar_e_exibir_cep, dados_produtora_ou_comprador_agricola, numero_endereco_localizacao, data_frame_dados
 
 
 def registrar_transporte() -> None:
@@ -23,13 +23,17 @@ def registrar_transporte() -> None:
     itens_selecao_produtos = exibicao_e_selecao_produtos(
         produtos_selecao_categoria)
 
+    # Altera estrutura de dados do produto para melhor exibição
+    for produto, detalhes in itens_selecao_produtos.items():
+        itens_selecao_produtos = {'produto': produto.replace("_", " ").upper()}
+        itens_selecao_produtos.update(detalhes)
+
     # Captura a quantidade de itens do produto selecionado para transporte
     quantidade_item_transporte = quantidade_para_transporte(
         itens_selecao_produtos)
 
     # Adiciona a quantidade do produto a ser transportado no dicionário do produto
-    for key in itens_selecao_produtos:
-        itens_selecao_produtos[key]['quantidade'] = quantidade_item_transporte
+    itens_selecao_produtos['quantidade'] = quantidade_item_transporte 
 
     # Captura dados de Origem para Transporte
     endereco_origem = solicitar_e_exibir_cep('ORIGEM')
@@ -44,7 +48,7 @@ def registrar_transporte() -> None:
     nome_produtora_agricola = dados_produtora_ou_comprador_agricola(
         'PRODUTORA')
 
-    # Criar um dicionario com os dados de ORIGEM
+    # Criar um dicionario dados de ORIGEM com a localizacao e o nome do produtor
     dados_origem = {
         'localizacao': endereco_origem,
         'nome_produtora_agricola': nome_produtora_agricola
@@ -56,33 +60,21 @@ def registrar_transporte() -> None:
     # Capturar numero do endereço de destino:
     numero_endereco_destino = numero_endereco_localizacao()
 
-    # Adiciona o numero da localizacao no dicionário de endereco de origem
+    # Adiciona o numero da localizacao no dicionário de endereco de destino
     endereco_destino['numero'] = numero_endereco_destino
 
     # Capturar dados do comprador agricola
     nome_comprador_agricola = dados_produtora_ou_comprador_agricola(
         'COMPRADOR')
 
-    # Criar um dicionario com os dados de DESTINO
+    # Criar um dicionario dados de DESTINO com a localizacao e nome do comprador
     dados_destino = {
         'localizacao': endereco_destino,
         'nome_comprador_agricola': nome_comprador_agricola
     }
 
-    # ------------------------------------------------------------
-
-    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
-
-    print('⚠️   Confirme os dados para registro: ')
-
-    # Exibi o produto selecionado e seus itens para tratamento
-    print(f'\nPRODUTO: {itens_selecao_produtos}')
-
-    # Exibi o endereco de origem e nome do produtor
-    print(f'\nORIGEM: {dados_origem}')
-
-    # Exibi o endereco de destino e nome do comprador
-    print(f'\nDESTINO: {dados_destino}')
+    # Exibição dos dados de registro de forma estruturada para confirmação
+    data_frame_dados(itens_selecao_produtos, dados_origem, dados_destino)
 
 
 def consultar_status_transporte() -> None:
