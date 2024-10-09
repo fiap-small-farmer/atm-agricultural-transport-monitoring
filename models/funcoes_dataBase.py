@@ -36,5 +36,6 @@ def conexao_banco_de_dados() -> bool:
 
     finally:
         limpar_terminal()
-        print(f"➡️   Status conexão banco de dados ORACLE: {
+        print(f"📡  Status conexão banco de dados ORACLE: {
               'Conectado ✅' if conexao == True else 'NÃO conectado 🚫'}\n")
+

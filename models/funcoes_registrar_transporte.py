@@ -1,7 +1,8 @@
-from models.procedimentos_menu import limpar_tela_e_exibir_titulo
-from models.validacao_entrada_dados import validacao_opcoes_menu, verificar_valores_nulos
 import requests
 import pandas as pd
+
+from models.procedimentos_menu import limpar_tela_e_exibir_titulo
+from models.validacao_entrada_dados import validacao_opcoes_menu, verificar_valores_nulos
 
 
 def exibicao_e_selecao_categoria(dados_categoria_produto: dict) -> dict:
@@ -173,7 +174,7 @@ def solicitar_e_exibir_cep(tipo: str) -> dict:
                             '\n⚠️   Por favor, tente novamente com um CEP correto.\n')
                         break
                     else:
-                        print('\n🚫  Por favor, insira S para sim ou N para não.')
+                        print('\n🚫  Por favor, digite [S] para sim ou [N] para não.')
 
                 if confirmacao == 'S':
                     break
@@ -224,7 +225,7 @@ def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
 
 
 def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:
-    # Limpa e ajusta os valores nulos
+    # Limpa e ajusta os valores nulos para "N/A"
     produto = verificar_valores_nulos(produto)
     origem = verificar_valores_nulos(origem)
     destino = verificar_valores_nulos(destino)
