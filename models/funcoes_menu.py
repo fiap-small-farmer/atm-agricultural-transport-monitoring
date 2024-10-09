@@ -2,6 +2,7 @@ import json
 import os
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
 from models.funcoes_registrar_transporte import exibicao_e_selecao_categoria, exibicao_e_selecao_produtos, quantidade_para_transporte, solicitar_e_exibir_cep, dados_produtora_ou_comprador_agricola, numero_endereco_localizacao, data_frame_dados
+from models.funcoes_dataBase import registro_dados
 
 
 def registrar_transporte() -> None:
@@ -26,7 +27,8 @@ def registrar_transporte() -> None:
 
         # Altera estrutura de dados do produto para melhor exibição
         for produto, detalhes in itens_selecao_produtos.items():
-            itens_selecao_produtos = {'produto': produto.replace("_", " ").upper()}
+            itens_selecao_produtos = {
+                'produto': produto.replace("_", " ").upper()}
             itens_selecao_produtos.update(detalhes)
 
         # Captura a quantidade de itens do produto selecionado para transporte
@@ -34,7 +36,7 @@ def registrar_transporte() -> None:
             itens_selecao_produtos)
 
         # Adiciona a quantidade do produto a ser transportado no dicionário do produto
-        itens_selecao_produtos['quantidade'] = quantidade_item_transporte 
+        itens_selecao_produtos['quantidade'] = quantidade_item_transporte
 
         # Captura dados de Origem para Transporte
         endereco_origem = solicitar_e_exibir_cep('ORIGEM')
@@ -76,27 +78,44 @@ def registrar_transporte() -> None:
 
         # Exibição dos dados de registro de forma estruturada para confirmação
         data_frame_dados(itens_selecao_produtos, dados_origem, dados_destino)
-        
+
         # Confirmação dos dados para registro no banco de dados
         while True:
-            confirmar_registro_dados = input('\n⚠️   OS DADOS PARA REGISTRO ESTÃO CORRETOS? (S/N): ').upper()
+            confirmar_registro_dados = input(
+                '\n\n⚠️   OS DADOS PARA REGISTRO ESTÃO CORRETOS? (S/N): ').upper()
 
             if confirmar_registro_dados == 'S':
                 # Função para salvar dados no banco de dados
-                
+                confirmacao_registro = registro_dados(
+                    itens_selecao_produtos, dados_origem, dados_destino)
 
-                input('\n✅  Dados registrados com SUCESSO, clique [ENTER] para continuar.')
-                break
+                # Verifica se não ocorreu nenhum erro ao salvar dados no banco de dados
+                if confirmacao_registro:
+                    print(
+                        '\n✅  Dados registrados com SUCESSO')
+                    confirmar_registro_dados = True
+                    break
+
+                else:
+                    confirmar_registro_dados = False
+                    break
 
             elif confirmar_registro_dados == 'N':
-                input('\n⚠️   Dados NÃO registrados, clique [ENTER] para efetuar um novo registro.')
+                input(
+                    '\n⚠️   Dados NÃO registrados, clique [ENTER] para efetuar um novo registro.')
                 break
 
             else:
                 print('\n🚫  Por favor, insira [S] para SIM ou [N] para NÃO.')
 
-        if confirmar_registro_dados == 'S':
-            break    
+        # Verifica se dados foram salvos no banco de dados, qualquer opcao diferente de TRUE retorna o Loop para iniciar novo registro
+        if confirmar_registro_dados == True:
+            break
+
+        elif confirmar_registro_dados == False:
+            input(
+                '\n🚫  Erro ao salvar registro no banco de dados, clique [ENTER] para efetuar um novo registro.')
+
 
 def consultar_status_transporte() -> None:
     limpar_tela_e_exibir_titulo('--- 📝 CONSULTAR STATUS DE TRANSPORTES ---')

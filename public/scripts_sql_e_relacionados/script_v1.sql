@@ -1,38 +1,38 @@
 CREATE TABLE Produto (
-    ID_Produto INT PRIMARY KEY,
+    ID_Produto NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Produto VARCHAR2(50),
     Quantidade INT,
     Unidade_Transporte VARCHAR2(20),
-    Temperatura_Minima NUMBER(5,2),
-    Temperatura_Maxima NUMBER(5,2),
+    Temperatura_Minima VARCHAR2(10),
+    Temperatura_Maxima VARCHAR2(10),
     Instrucoes VARCHAR2(255),
-    Tipo_Caminhão VARCHAR2(20)
+    Tipo_Caminhao VARCHAR2(20)
 );
 
 CREATE TABLE Origem (
-    ID_Origem INT PRIMARY KEY,
+    ID_Origem NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome_Produtora VARCHAR2(50),
     CEP VARCHAR2(9),
-    Endereço VARCHAR2(100),
-    Número INT,
+    Endereco VARCHAR2(100),
+    Numero INT,
     Bairro VARCHAR2(50),
     Cidade VARCHAR2(50),
     Estado VARCHAR2(2)
 );
 
 CREATE TABLE Destino (
-    ID_Destino INT PRIMARY KEY,
+    ID_Destino NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Nome_Comprador VARCHAR2(50),
     CEP VARCHAR2(9),
-    Endereço VARCHAR2(100),
-    Número INT,
+    Endereco VARCHAR2(100),
+    Numero INT,
     Bairro VARCHAR2(50),
     Cidade VARCHAR2(50),
     Estado VARCHAR2(2)
 );
 
 CREATE TABLE Transporte (
-    ID_Transporte INT PRIMARY KEY,
+    ID_Transporte NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ID_Produto INT,
     ID_Origem INT,
     ID_Destino INT,
