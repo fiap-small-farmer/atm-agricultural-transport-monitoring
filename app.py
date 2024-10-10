@@ -1,7 +1,7 @@
 import sys
 from models.validacao_dados import validacao_opcoes_menu
 from models.procedimentos_menu import voltar_menu, limpar_terminal
-from models.funcoes_menu import registrar_transporte, iniciar_transporte_monitoramento ,consultar_status_transporte, consultar_todos_transportes
+from models.funcoes_menu import registrar_transporte, iniciar_transporte_monitoramento ,alterar_status_transporte, consultar_todos_transportes
 from models.funcoes_dataBase import conexao_banco_de_dados
 
 
@@ -11,7 +11,7 @@ def menu() -> None:
     lista_opcoes_menu = (
         ' 1 - Registrar transporte',
         ' 2 - Iniciar transporte e monitoramento',
-        ' 3 - Consultar status de transporte',
+        ' 3 - Alterar status de transporte',
         ' 4 - Consultar todos os transportes',
         ' 5 - SAIR'
     )
@@ -33,7 +33,7 @@ def opcoes_menu() -> None:
                 voltar_menu(iniciar_transporte_monitoramento)
 
             case 3:
-                voltar_menu(consultar_status_transporte)
+                voltar_menu(alterar_status_transporte)
 
             case 4:
                 voltar_menu(consultar_todos_transportes)

@@ -335,3 +335,34 @@ def atualizar_status_transporte(id_transporte: int, status: str) -> bool:
             f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO ORACLE DATABASE {erro}')
         
         return False
+    
+
+def consulta_transporte_por_status_andamento() -> list:
+    try:
+        # Consulta na tabela transporte todos os dados que atende a condição abaixo
+        inst_consultar.execute("""
+            SELECT * FROM Transporte
+            WHERE Status_Transporte IN ('Em andamento')
+        """)
+
+        # Recupera todos os dados que atendem à condição
+        dados_consulta = inst_consultar.fetchall()
+
+        # Transforma a lista de tuplas em uma lista de dicionários
+        dados_formatados = [
+            {
+                'id_transporte': tupla[0],
+                'id_produto': tupla[1],
+                'id_origem': tupla[2],
+                'id_destino': tupla[3],
+                'status_transporte': tupla[4],
+                'temp_monitorada': tupla[5]
+            }
+            for tupla in dados_consulta
+        ]
+
+        # Retorna os dados formatados
+        return dados_formatados
+
+    except Exception as erro:
+        input(f'\n☛ Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
