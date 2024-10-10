@@ -14,8 +14,6 @@ def validacao_opcoes_menu() -> int:
     return opcao
 
 # Função de segurança para substituir valores null ou string vazia por 'N/A'
-
-
 def verificar_valores_nulos(dados: dict) -> dict:
     for chave, valor in dados.items():
         if isinstance(valor, dict):  # Verifica se o valor também é um dicionário
@@ -26,3 +24,5 @@ def verificar_valores_nulos(dados: dict) -> dict:
             dados[chave] = 'N/A'
             
     return dados
+
+

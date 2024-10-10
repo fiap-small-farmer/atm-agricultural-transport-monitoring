@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 import os
 import oracledb
+
 from models.procedimentos_menu import limpar_terminal
-from models.validacao_entrada_dados import verificar_valores_nulos
+from models.validacao_dados import verificar_valores_nulos
 
 
 def conexao_banco_de_dados() -> bool:
@@ -181,5 +182,135 @@ def registro_dados(produto: dict, origem: dict, destino: dict) -> bool:
     except Exception as erro:
         input(
             f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE REGISTRO ORACLE DATABASE {erro}')
-        
+
         return False
+
+
+def listar_dados_transporte_monitoramento() -> list:
+    try:
+        # Consulta na tabela transporte todos os dados que atende a condição abaixo
+        inst_consultar.execute("""
+            SELECT * FROM Transporte
+            WHERE Status_Transporte IN ('Não iniciado')
+        """)
+
+        # Recupera todos os dados que atendem à condição
+        dados_consulta = inst_consultar.fetchall()
+
+        # Transforma a lista de tuplas em uma lista de dicionários
+        dados_consulta = [
+            {
+                'id_transporte': tupla[0],
+                'id_produto': tupla[1],
+                'id_origem': tupla[2],
+                'id_destino': tupla[3],
+                'status_transporte': tupla[4],
+                'temp_monitorada': tupla[5]
+            }
+            for tupla in dados_consulta
+        ]
+
+        # retorna os dados consultados
+        return dados_consulta
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+        
+
+def consultar_produto(produto_id: int) -> list:
+    try:
+        # Consulta na tabela produto, retorna todos os dados que atende a condição abaixo
+        registro_consulta = f"""SELECT * FROM Produto WHERE ID_Produto = {
+            produto_id}"""
+        inst_consultar.execute(registro_consulta)
+
+        # Recupera todos os dados que atendem à condição
+        dados_consulta = inst_consultar.fetchall()
+
+        # Transforma a lista de tuplas em uma lista de dicionários
+        dados_consulta = [
+            {
+                'id_produto': tupla[0],
+                'produto': tupla[1],
+                'quantidade': tupla[2],
+                'und_transporte': tupla[3],
+                'instrucoes': tupla[6],
+                'tipo_caminhao': tupla[7]
+            }
+            for tupla in dados_consulta
+        ]
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+
+    finally:
+        # retorna os dados consultados
+        return dados_consulta
+
+
+def consultar_origem(id_origem: int) -> list:
+    try:
+        # Consulta na tabela origem, retorna todos os dados que atende a condição abaixo
+        registro_consulta = f"""SELECT * FROM Origem WHERE ID_Origem = {
+            id_origem}"""
+        inst_consultar.execute(registro_consulta)
+
+        # Recupera todos os dados que atendem à condição
+        dados_consulta = inst_consultar.fetchall()
+    
+        # Transforma a lista de tuplas em uma lista de dicionários
+        dados_consulta = [
+            {
+                'id_origem': tupla[0],
+                'nome_produtora': tupla[1],
+                'cep_origem': tupla[2],
+                'endereco_origem': tupla[3],
+                'numero_origem': tupla[4],
+                'cidade_origem': tupla[6],
+                'Estado_origem': tupla[7]
+            }
+            for tupla in dados_consulta
+        ]
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+
+    finally:
+        # retorna os dados consultados
+        return dados_consulta
+
+
+def consultar_destino(id_destino: int) -> list:
+    try:
+        # Consulta na tabela destino, retorna todos os dados que atende a condição abaixo
+        registro_consulta = f"""SELECT * FROM Destino WHERE ID_Destino = {
+            id_destino}"""
+        inst_consultar.execute(registro_consulta)
+
+        # Recupera todos os dados que atendem à condição
+        dados_consulta = inst_consultar.fetchall()
+    
+        # Transforma a lista de tuplas em uma lista de dicionários
+        dados_consulta = [
+            {
+                'id_destino': tupla[0],
+                'nome_comprador': tupla[1],
+                'cep_destino': tupla[2],
+                'endereco_destino': tupla[3],
+                'numero_destino': tupla[4],
+                'cidade_destino': tupla[6],
+                'Estado_destino': tupla[7]
+            }
+            for tupla in dados_consulta
+        ]
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+
+    finally:
+        # retorna os dados consultados
+        return dados_consulta

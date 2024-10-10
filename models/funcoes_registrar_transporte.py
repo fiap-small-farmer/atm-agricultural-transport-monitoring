@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
-from models.validacao_entrada_dados import validacao_opcoes_menu, verificar_valores_nulos
+from models.validacao_dados import validacao_opcoes_menu, verificar_valores_nulos
 
 
 def exibicao_e_selecao_categoria(dados_categoria_produto: dict) -> dict:
