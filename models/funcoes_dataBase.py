@@ -314,3 +314,24 @@ def consultar_destino(id_destino: int) -> list:
     finally:
         # retorna os dados consultados
         return dados_consulta
+
+
+def atualizar_status_transporte(id_transporte: int, status: str) -> bool:
+    # Atualiza o status do transporte mediante ao status passado como parâmetro
+    try:
+        registro = f"""
+            UPDATE Transporte
+            SET Status_Transporte = :status
+            WHERE ID_Transporte = :id_transporte
+            """
+        
+        inst_atualizar.execute(registro, {"status": status, "id_transporte": id_transporte})
+        conn.commit()
+
+        return True
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO ORACLE DATABASE {erro}')
+        
+        return False

@@ -1,4 +1,5 @@
 from models.funcoes_dataBase import consultar_produto, consultar_origem, consultar_destino
+from models.validacao_dados import verificar_valor_na_lista
 import pandas as pd
 
 
@@ -117,9 +118,12 @@ def exibir_dados_estruturado(lista_transportes_produtos_origem_destino: list) ->
 
 def combinar_dados(lista_transportes: list, lista_produtos: list, lista_origem: list, lista_destino: list) -> list:
     # Combina as listas de transportes com a lista de produtos, origem e destino
-    produtos_por_id = {produto['id_produto']: produto for produto in lista_produtos}
+    # Prepara os dados para combinação
+    produtos_por_id = {produto['id_produto']
+        : produto for produto in lista_produtos}
     origens_por_id = {origem['id_origem']: origem for origem in lista_origem}
-    destinos_por_id = {destino['id_destino']: destino for destino in lista_destino}
+    destinos_por_id = {destino['id_destino']
+        : destino for destino in lista_destino}
 
     lista_transportes_produtos_origem_destino = []
 
@@ -145,3 +149,43 @@ def combinar_dados(lista_transportes: list, lista_produtos: list, lista_origem: 
         lista_transportes_produtos_origem_destino.append(combinado)
 
     return lista_transportes_produtos_origem_destino
+
+
+def selecionar_id_transporte(lista_ids_transportes: list) -> int:
+    # Solicita e válida o ID do transporte para atualizar status
+    try:
+        while True:
+            id_transporte = int(input(
+                f'\n➡️   Informe o ID do transporte para iniciar a entrega e o monitoramento: '))
+            
+            id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
+
+            if id_valido:
+                break
+            else:
+                print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
+
+    except:
+        while True:
+            if id_valido != 'not found':
+              id_transporte = input('\n⚠️   Digite uma opção válida: ')
+
+            else:
+              id_transporte = (input(
+              f'\n➡️   Informe o ID do transporte para iniciar a entrega e o monitoramento: ')) 
+
+            if id_transporte.isdigit():
+                id_transporte = int(id_transporte)
+
+                id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
+
+                if id_valido:
+                    break
+                else:
+                    print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
+                    id_valido = 'not found'
+
+            else:
+                print('\n🚫  Por favor, insira apenas dígitos.')
+
+    return id_transporte

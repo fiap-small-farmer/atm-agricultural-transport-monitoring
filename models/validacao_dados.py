@@ -13,16 +13,23 @@ def validacao_opcoes_menu() -> int:
 
     return opcao
 
+
 # Função de segurança para substituir valores null ou string vazia por 'N/A'
 def verificar_valores_nulos(dados: dict) -> dict:
     for chave, valor in dados.items():
         if isinstance(valor, dict):  # Verifica se o valor também é um dicionário
             # Chamada recursiva para dicionários aninhados
             verificar_valores_nulos(valor)
-        
+
         elif valor is None or valor == '':
             dados[chave] = 'N/A'
-            
+
     return dados
 
 
+# Verifica se valor Inteiro encontra em uma lista passada
+def verificar_valor_na_lista(valor: int, lista: list) -> bool:
+    if valor in lista:
+        return True
+    else:
+        return False

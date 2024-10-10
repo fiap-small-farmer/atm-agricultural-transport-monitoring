@@ -3,8 +3,8 @@ import os
 
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
 from models.funcoes_registrar_transporte import exibicao_e_selecao_categoria, exibicao_e_selecao_produtos, quantidade_para_transporte, solicitar_e_exibir_cep, dados_produtora_ou_comprador_agricola, numero_endereco_localizacao, data_frame_dados
-from models.funcoes_iniciar_transporte_monitoramento import consultar_dados_produto, consultar_dados_origem, consultar_dados_destino, exibir_dados_estruturado, combinar_dados
-from models.funcoes_dataBase import registro_dados, listar_dados_transporte_monitoramento
+from models.funcoes_iniciar_transporte_monitoramento import consultar_dados_produto, consultar_dados_origem, consultar_dados_destino, exibir_dados_estruturado, combinar_dados, selecionar_id_transporte
+from models.funcoes_dataBase import registro_dados, listar_dados_transporte_monitoramento, atualizar_status_transporte
 
 
 def registrar_transporte() -> None:
@@ -131,19 +131,39 @@ def iniciar_transporte_monitoramento() -> None:
         lista_produtos = consultar_dados_produto(lista_transportes)
         lista_origem = consultar_dados_origem(lista_transportes)
         lista_destino = consultar_dados_destino(lista_transportes)
-        
+
         # Combina os dados da Lista de transporte, produto, origem e destino em uma único dicionário
-        lista_transportes_produtos_origem_destino = combinar_dados(lista_transportes, lista_produtos, lista_origem, lista_destino)
-        
+        lista_transportes_produtos_origem_destino = combinar_dados(
+            lista_transportes, lista_produtos, lista_origem, lista_destino)
+
         # Exibi os dados de forma estruturada usando pandas
         exibir_dados_estruturado(lista_transportes_produtos_origem_destino)
 
-    else:
-        return print('↘️   Nenhum transporte registrado ou com status "Não iniciado" ou "Em andamento".')
+        # Cria uma lista de Ids dos transportes que consta com status "Não iniciado"
+        lista_ids_transportes = []
+        for transporte in lista_transportes:
+            transporte_id = transporte.get("id_transporte")
+            lista_ids_transportes.append(transporte_id)
 
-    # SOLICITAR ID DO TRANSPORTE
-    
-    # ALTERAR STATUS DO TRANSPORTE PARA "EM ANDAMENTO" OU "CONCLUÍDO"
+        # Solicita e valida o ID do transporte para atualizar status
+        id_transporte = selecionar_id_transporte(lista_ids_transportes)
+
+        # Alteração do status do transporte para Em andamento
+        status_transporte = 'Em andamento'
+
+        # Atualiza o status no banco de dados
+        confirmacao_atualizacao_status = atualizar_status_transporte(
+            id_transporte, status_transporte)
+
+        if confirmacao_atualizacao_status:
+            print(f"""\n✅   Status do transporte com o ID número {
+                  id_transporte} atualizado para '{status_transporte}'""")
+            
+        else:
+            print(f'\n🚫  Status não atualizado, tente novamente.')
+
+    else:
+        return print('↘️   Nenhum transporte "registrado" ou com status "Não iniciado".')
 
 
 def consultar_status_transporte() -> None:
