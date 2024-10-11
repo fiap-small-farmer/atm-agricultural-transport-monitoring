@@ -181,18 +181,28 @@ def registro_dados(produto: dict, origem: dict, destino: dict) -> bool:
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE REGISTRO ORACLE DATABASE {erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE REGISTRO DE DADOS ORACLE DATABASE {erro}')
 
         return False
 
 
-def listar_dados_transporte_monitoramento() -> list:
+def consultar_transporte_por_status(status: str) -> list:
     try:
-        # Consulta na tabela transporte todos os dados que atende a condição abaixo
-        inst_consultar.execute("""
+        # Instrução SQL para consultar dados do transporte mediante ao status
+        if status == 'todos':
+            registro = """
+                SELECT * FROM Transporte
+                """
+            # Consulta na tabela transporte todos os dados que atende a condição da instrução
+            inst_consultar.execute(registro)
+
+        else:
+            registro = f"""
             SELECT * FROM Transporte
-            WHERE Status_Transporte IN ('Não iniciado')
-        """)
+            WHERE Status_Transporte = :status
+            """
+            # Consulta na tabela transporte todos os dados que atende a condição da instrução
+            inst_consultar.execute(registro, {"status": status})
 
         # Recupera todos os dados que atendem à condição
         dados_consulta = inst_consultar.fetchall()
@@ -215,15 +225,16 @@ def listar_dados_transporte_monitoramento() -> list:
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
-        
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA TRANSPORTES ORACLE DATABASE {erro}')
+
 
 def consultar_produto(produto_id: int) -> list:
     try:
-        # Consulta na tabela produto, retorna todos os dados que atende a condição abaixo
-        registro_consulta = f"""SELECT * FROM Produto WHERE ID_Produto = {
-            produto_id}"""
-        inst_consultar.execute(registro_consulta)
+        # Instrução SQL para consultar dados do Produto mediante ao Id do Produto
+        registro = f"""SELECT * FROM Produto WHERE ID_Produto = :id_produto"""
+
+        # Consulta na tabela produto, retorna todos os dados que atende a condição da instrução
+        inst_consultar.execute(registro, {"id_produto": produto_id})
 
         # Recupera todos os dados que atendem à condição
         dados_consulta = inst_consultar.fetchall()
@@ -235,6 +246,8 @@ def consultar_produto(produto_id: int) -> list:
                 'produto': tupla[1],
                 'quantidade': tupla[2],
                 'und_transporte': tupla[3],
+                'temp_minima': tupla[4],
+                'temp_maxima': tupla[5],
                 'instrucoes': tupla[6],
                 'tipo_caminhao': tupla[7]
             }
@@ -243,7 +256,7 @@ def consultar_produto(produto_id: int) -> list:
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA PRODUTOS ORACLE DATABASE {erro}')
 
     finally:
         # retorna os dados consultados
@@ -252,14 +265,15 @@ def consultar_produto(produto_id: int) -> list:
 
 def consultar_origem(id_origem: int) -> list:
     try:
-        # Consulta na tabela origem, retorna todos os dados que atende a condição abaixo
-        registro_consulta = f"""SELECT * FROM Origem WHERE ID_Origem = {
-            id_origem}"""
-        inst_consultar.execute(registro_consulta)
+        # Instrução SQL para consultar dados de Origem mediante ao Id da origem
+        registro_consulta = f"""SELECT * FROM Origem WHERE ID_Origem = :id_origem"""
+
+        # Consulta na tabela Origem, retorna todos os dados que atende a condição da instrução
+        inst_consultar.execute(registro_consulta, {"id_origem": id_origem})
 
         # Recupera todos os dados que atendem à condição
         dados_consulta = inst_consultar.fetchall()
-    
+
         # Transforma a lista de tuplas em uma lista de dicionários
         dados_consulta = [
             {
@@ -276,7 +290,7 @@ def consultar_origem(id_origem: int) -> list:
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORIGEM ORACLE DATABASE {erro}')
 
     finally:
         # retorna os dados consultados
@@ -285,14 +299,15 @@ def consultar_origem(id_origem: int) -> list:
 
 def consultar_destino(id_destino: int) -> list:
     try:
-        # Consulta na tabela destino, retorna todos os dados que atende a condição abaixo
-        registro_consulta = f"""SELECT * FROM Destino WHERE ID_Destino = {
-            id_destino}"""
-        inst_consultar.execute(registro_consulta)
+        # Instrução SQL para consultar dados de Destino mediante ao Id do destino
+        registro = f"""SELECT * FROM Destino WHERE ID_Destino = :id_destino"""
+
+        # Consulta na tabela Destino, retorna todos os dados que atende a condição da instrução
+        inst_consultar.execute(registro, {"id_destino": id_destino})
 
         # Recupera todos os dados que atendem à condição
         dados_consulta = inst_consultar.fetchall()
-    
+
         # Transforma a lista de tuplas em uma lista de dicionários
         dados_consulta = [
             {
@@ -309,7 +324,7 @@ def consultar_destino(id_destino: int) -> list:
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE CONSULTA DESTINO ORACLE DATABASE {erro}')
 
     finally:
         # retorna os dados consultados
@@ -319,50 +334,22 @@ def consultar_destino(id_destino: int) -> list:
 def atualizar_status_transporte(id_transporte: int, status: str) -> bool:
     # Atualiza o status do transporte mediante ao status passado como parâmetro
     try:
+        # Instrução SQL para atualizar o status pelo Id do transporte
         registro = f"""
             UPDATE Transporte
             SET Status_Transporte = :status
             WHERE ID_Transporte = :id_transporte
             """
-        
-        inst_atualizar.execute(registro, {"status": status, "id_transporte": id_transporte})
+
+        # Executa a atualização com as instruções do registro
+        inst_atualizar.execute(
+            registro, {"status": status, "id_transporte": id_transporte})
         conn.commit()
 
         return True
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO ORACLE DATABASE {erro}')
-        
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO STATUS ORACLE DATABASE {erro}')
+
         return False
-    
-
-def consulta_transporte_por_status_andamento() -> list:
-    try:
-        # Consulta na tabela transporte todos os dados que atende a condição abaixo
-        inst_consultar.execute("""
-            SELECT * FROM Transporte
-            WHERE Status_Transporte IN ('Em andamento')
-        """)
-
-        # Recupera todos os dados que atendem à condição
-        dados_consulta = inst_consultar.fetchall()
-
-        # Transforma a lista de tuplas em uma lista de dicionários
-        dados_formatados = [
-            {
-                'id_transporte': tupla[0],
-                'id_produto': tupla[1],
-                'id_origem': tupla[2],
-                'id_destino': tupla[3],
-                'status_transporte': tupla[4],
-                'temp_monitorada': tupla[5]
-            }
-            for tupla in dados_consulta
-        ]
-
-        # Retorna os dados formatados
-        return dados_formatados
-
-    except Exception as erro:
-        input(f'\n☛ Aperte [ENTER] para continuar\n\nERRO DE CONSULTA ORACLE DATABASE {erro}')
