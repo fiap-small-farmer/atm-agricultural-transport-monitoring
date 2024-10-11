@@ -1,5 +1,4 @@
 import requests
-import pandas as pd
 from prettytable import PrettyTable
 
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
@@ -228,78 +227,6 @@ def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
 
         else:
             return nome_produtor
-
-
-def data_frame_dados1(produto: dict, origem: dict, destino: dict) -> None:
-    # Limpa e ajusta os valores nulos para "N/A"
-    produto = verificar_valores_nulos(produto)
-    origem = verificar_valores_nulos(origem)
-    destino = verificar_valores_nulos(destino)
-
-    limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
-
-    # Dados de entrada do produto
-    produto_data = {
-        'Parâmetro': ['Produto', 'Quantidade', 'Unidade de Transporte', 'Temperatura Mínima ºc', 'Temperatura Máxima ºc', 'Instruções', 'Tipo de Caminhão'],
-        'Valor': [
-            produto.get('produto', 'N/A'),
-            produto.get('quantidade', 'N/A'),
-            produto.get('unidade_transporte', 'N/A'),
-            produto.get('min', 'N/A'),
-            produto.get('max', 'N/A'),
-            produto.get('instruções', 'N/A'),
-            produto.get('tipo_caminhao', 'N/A')
-        ]
-    }
-
-    # Dados de origem (produtora)
-    produtora_data = {
-        'Parâmetro': ['Nome da produtora', 'CEP', 'Endereço', 'Número', 'Bairro', 'Cidade', 'Estado'],
-        'Valor': [
-            origem.get('nome_produtora_agricola', 'N/A'),
-            origem.get('localizacao', {}).get('cep', 'N/A'),
-            origem.get('localizacao', {}).get('endereco', 'N/A'),
-            origem.get('localizacao', {}).get('numero', 'N/A'),
-            origem.get('localizacao', {}).get('bairro', 'N/A'),
-            origem.get('localizacao', {}).get('cidade', 'N/A'),
-            origem.get('localizacao', {}).get('estado', 'N/A')
-        ]
-    }
-
-    # Dados de destino (comprador)
-    comprador_data = {
-        'Parâmetro': ['Nome do comprador', 'CEP', 'Endereço', 'Número', 'Bairro', 'Cidade', 'Estado'],
-        'Valor': [
-            destino.get('nome_comprador_agricola', 'N/A'),
-            destino.get('localizacao', {}).get('cep', 'N/A'),
-            destino.get('localizacao', {}).get('endereco', 'N/A'),
-            destino.get('localizacao', {}).get('numero', 'N/A'),
-            destino.get('localizacao', {}).get('bairro', 'N/A'),
-            destino.get('localizacao', {}).get('cidade', 'N/A'),
-            destino.get('localizacao', {}).get('estado', 'N/A')
-        ]
-    }
-
-    # Estruturando os dados com pandas
-    produto_df = pd.DataFrame(produto_data)
-    produtora_df = pd.DataFrame(produtora_data)
-    comprador_df = pd.DataFrame(comprador_data)
-
-    # Ajustar a largura para exibição completa
-    pd.set_option('display.width', 500)
-
-    # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
-    print("📝 DADOS PRODUTO:\n")
-    for index, row in produto_df.iterrows():
-        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
-
-    print("\n📝 DADOS ORIGEM:\n")
-    for index, row in produtora_df.iterrows():
-        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
-
-    print("\n📝 DADOS DESTINO:\n")
-    for index, row in comprador_df.iterrows():
-        print(f"{row['Parâmetro']:<30} {row['Valor']:<30}")
 
 
 def data_frame_dados(produto: dict, origem: dict, destino: dict) -> None:

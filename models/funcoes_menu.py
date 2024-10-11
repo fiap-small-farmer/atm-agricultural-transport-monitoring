@@ -55,7 +55,7 @@ def registrar_transporte() -> None:
         nome_produtora_agricola = dados_produtora_ou_comprador_agricola(
             'PRODUTORA')
 
-        # Criar um dicionario com od dados de ORIGEM com a localizacao e o nome do produtor
+        # Criar um dicionario com os dados de ORIGEM com a localizacao e o nome do produtor
         dados_origem = {
             'localizacao': endereco_origem,
             'nome_produtora_agricola': nome_produtora_agricola
