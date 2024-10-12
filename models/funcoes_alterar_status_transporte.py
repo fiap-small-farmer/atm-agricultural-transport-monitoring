@@ -3,44 +3,28 @@ from models.validacao_dados import verificar_valor_na_lista
 
 def selecionar_id_transporte_atualizar_status(lista_ids_transportes: list) -> int:
     # Solicita e válida o ID do transporte para atualizar status
-    try:
-        while True:
-            id_transporte = int(input(
-                f'\n➡️   Informe o ID do transporte para alterar o status: '))
+    while True:
+        try:
+            id_transporte = input(f'\n➡️   Informe o ID do transporte para alterar o status: ')
 
-            id_valido = verificar_valor_na_lista(
-                id_transporte, lista_ids_transportes)
+            if id_transporte.strip() == '':
+                print('\n⚠️   Por favor, informe um ID de transporte válido.')
+                continue
+
+            id_transporte = int(id_transporte)
+
+            id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
 
             if id_valido:
                 break
             else:
-                print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
+                print(f'\n⚠️   ID de transporte não encontrado, tente novamente.')
 
-    except:
-        while True:
-            if id_valido != 'not found':
-                id_transporte = input('\n⚠️   Digite uma opção válida: ')
-
-            else:
-                id_transporte = (input(
-                    f'\n➡️   Informe o ID do transporte para alterar o status: '))
-
-            if id_transporte.isdigit():
-                id_transporte = int(id_transporte)
-
-                id_valido = verificar_valor_na_lista(
-                    id_transporte, lista_ids_transportes)
-
-                if id_valido:
-                    break
-                else:
-                    print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
-                    id_valido = 'not found'
-
-            else:
-                print('\n🚫  Por favor, insira apenas dígitos.')
+        except ValueError:
+            print('\n🚫  Por favor, insira apenas dígitos.')
 
     return id_transporte
+
 
 
 def opcoes_status() -> str:

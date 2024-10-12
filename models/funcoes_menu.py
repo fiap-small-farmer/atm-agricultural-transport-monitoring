@@ -197,7 +197,7 @@ def iniciar_transporte_monitoramento() -> None:
             return print('↘️   Nenhum transporte registrado.')
 
 
-def alterar_status_transporte() -> None:
+def alterar_status_transporte1() -> None:
     limpar_tela_e_exibir_titulo('--- 📝 ALTERAR STATUS DE TRANSPORTES ---')
 
     # Busca no banco de dados todos os transportes com status "Em andamento"
@@ -243,6 +243,83 @@ def alterar_status_transporte() -> None:
 
     else:
         return print('↘️   Nenhum transporte com status "Em andamento".')
+
+
+def alterar_status_transporte() -> None:
+    while True:
+        limpar_tela_e_exibir_titulo('--- 📝 ALTERAR STATUS DE TRANSPORTES ---')
+
+        # Busca no banco de dados todos os transportes com status "Em andamento"
+        lista_transportes = consultar_transporte_por_status('Em andamento')
+
+        # Se o retorno de transportes do banco de dados for vazio, informa ao usuário uma mensagem
+        if len(lista_transportes) > 0:
+            # Efetua a consulta de todos os produtos, origens e destinos vinculados aos transportes criados e retorna uma lista dos mesmos
+            lista_produtos = consultar_dados_produto(lista_transportes)
+            lista_origem = consultar_dados_origem(lista_transportes)
+            lista_destino = consultar_dados_destino(lista_transportes)
+
+            # Combina os dados da Lista de transporte, produto, origem e destino em uma único dicionário
+            lista_transportes_produtos_origem_destino = combinar_dados(
+                lista_transportes, lista_produtos, lista_origem, lista_destino)
+
+            # Exibi os todos os dados de forma estruturada usando prettytable
+            exibir_dados_estruturado_resumido(
+                lista_transportes_produtos_origem_destino)
+
+            # Exibi opcoes para mostrar detalhes, iniciar transporte ou sair
+            opcao_selecionada = opcoes_apos_consulta('Em andamento')
+
+            if opcao_selecionada == 'detalhes':
+                # Cria uma lista de Ids baseado na lista de transportes, onde o conteúdo dessa lista será todos os IDs de transportes recuperados do banco de dados
+                lista_ids_transportes = []
+                for transporte in lista_transportes:
+                    transporte_id = transporte.get("id_transporte")
+                    lista_ids_transportes.append(transporte_id)
+
+                # Solicita e valida o ID do transporte para atualizar status
+                id_transporte = selecionar_id_transporte_para_mais_detalhes(
+                    lista_ids_transportes)
+
+                # Obtém e exibi os detalhes dos dados da produtora e do comprador agricola na forma de tabela
+                obter_detalhes_produtor_comprador(
+                    id_transporte, lista_transportes_produtos_origem_destino)
+
+                input(
+                    f'\n⚠️   Clique em [ENTER] para retornar ao menu.')
+
+            elif opcao_selecionada == 'alterar status':
+                # Cria uma lista de Ids dos transportes que consta com status "Em andamento"
+                lista_ids_transportes = []
+                for transporte in lista_transportes:
+                    transporte_id = transporte.get("id_transporte")
+                    lista_ids_transportes.append(transporte_id)
+
+                # Solicita e valida o ID do transporte para atualizar status
+                id_transporte = selecionar_id_transporte_atualizar_status(
+                    lista_ids_transportes)
+
+                # Solicita ao usuário a opção de alterar o status para "Concluído" ou  "Cancelado"
+                opcao_status = opcoes_status()
+
+                # Acessa o banco de dados e atualiza o status de transporte
+                confirmacao_atualizacao_status = atualizar_status_transporte(
+                    id_transporte, opcao_status)
+
+                if confirmacao_atualizacao_status:
+                    print(f"""\n✅   Status do transporte com o ID número {
+                        id_transporte} atualizado para '{opcao_status}'""")
+                    input(f'\n⚠️   Clique em [ENTER] para retornar ao menu.')
+
+                else:
+                    print(f'\n🚫  Status não atualizado, tente novamente.')
+                    input(f'\nn⚠️   Clique em [ENTER] para retornar ao menu.')
+
+            elif opcao_selecionada == 'sair':
+                break
+
+        else:
+            return print('↘️   Nenhum transporte com status "Em andamento".')
 
 
 def consultar_todos_transportes() -> None:

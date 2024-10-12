@@ -11,7 +11,7 @@ def limpar_terminal():
 
 def voltar_menu(opcao_selecionada: Callable) -> None:
     opcao_selecionada()
-    input('\n⚠️   Digite qualquer tecla para retornar ao menu')
+    input('\n⚠️   Digite qualquer tecla para retornar ao menu principal.')
     limpar_terminal()
 
 

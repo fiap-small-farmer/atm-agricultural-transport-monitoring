@@ -74,7 +74,7 @@ def exibir_dados_estruturado_origem_destino(id_transporte: int, dados_detalhes: 
     destino = PrettyTable()
     destino.field_names = ['COMPRADOR', 'CEP',
                            'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
-    destino.align = 'l' 
+    destino.align = 'l'
     destino.add_row([
         dados_destino.get('nome_comprador', '').ljust(
             espaco_fixo)[:espaco_fixo],
@@ -117,6 +117,15 @@ def opcoes_apos_consulta(tipo: str) -> str:
             ' 3 - Sair',
         )
 
+    elif tipo == 'Em andamento':
+        # Exibi as opcoes para escolha
+        print('\n↘️   Menu alterar status de transportes:\n')
+        lista_opcoes_menu = (
+            ' 1 - Exibir mais detalhes',
+            ' 2 - Alterar status do transporte',
+            ' 3 - Sair',
+        )
+
     for opcao_menu in lista_opcoes_menu:
         print(opcao_menu)
 
@@ -156,7 +165,18 @@ def opcoes_apos_consulta(tipo: str) -> str:
                     case _:
                         print(f'\n⚠️   Opção inválida, tente novamente.')
 
- 
+            elif tipo == 'Em andamento':
+                match opcao:
+                    case 1:
+                        return 'detalhes'
+                    case 2:
+                        return 'alterar status'
+                    case 3:
+                        return 'sair'
+                    case _:
+                        print(f'\n⚠️   Opção inválida, tente novamente.')
+
+
 def selecionar_id_transporte_para_mais_detalhes(lista_ids_transportes: list) -> int:
     # Solicita e valida o ID do transporte para atualizar status
     while True:
@@ -166,7 +186,8 @@ def selecionar_id_transporte_para_mais_detalhes(lista_ids_transportes: list) -> 
         # Verifica se a entrada não está vazia e se é um número
         if id_transporte.isdigit():
             id_transporte = int(id_transporte)
-            id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
+            id_valido = verificar_valor_na_lista(
+                id_transporte, lista_ids_transportes)
 
             if id_valido:
                 break
