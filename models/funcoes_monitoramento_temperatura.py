@@ -43,13 +43,13 @@ def data_hora_ptbr() -> str:
 
 def registrar_log_monitoramento(dados_monitorados: dict) -> None:
     # Nome do arquivo de log
-    nome_arquivo = "monitoramento_transporte.txt"
+    nome_arquivo = "log_monitoramento_transporte.txt"
 
     # Verifica se o arquivo já existe; se não, cria o cabeçalho
     if not os.path.exists(nome_arquivo):
         with open(nome_arquivo, 'w') as arquivo:
             arquivo.write(
-                "Log de Monitoramento de Transporte Small Farmer Tracking\n")
+                "LOG DE MONITORAMENTO DE TRANSPORTE SMALL FARMER TRACKING\n")
             arquivo.write("="*150 + "\n")
 
     # Abre o arquivo em modo de append

@@ -56,7 +56,7 @@ def monitoramento_temperatura():
             registrar_log_monitoramento(dados_monitoramento)
 
             # Ler o arquivo de log gerado e efetua uma média das temperaturas monitoradas mediante ao id informado
-            lista_temp_monitorada = calcular_media_temperatura_por_id(transporte.get('id_transporte'), "monitoramento_transporte.txt")
+            lista_temp_monitorada = calcular_media_temperatura_por_id(transporte.get('id_transporte'), "log_monitoramento_transporte.txt")
             
             #Atualiza a temperatura monitorada no banco de dados
             atualizar_temperatura_monitorada_banco_dados(lista_temp_monitorada)
