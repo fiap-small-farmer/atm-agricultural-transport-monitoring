@@ -122,50 +122,79 @@ def registrar_transporte() -> None:
 
 
 def iniciar_transporte_monitoramento() -> None:
-    limpar_tela_e_exibir_titulo('--- 📝 INICIAR TRANSPORTE E MONITORAMENTO ---')
+    while True:
+        limpar_tela_e_exibir_titulo(
+            '--- 📝 INICIAR TRANSPORTE E MONITORAMENTO ---')
 
-    # Busca no banco de dados todos os transportes com status "Não iniciado"
-    lista_transportes = consultar_transporte_por_status('Não iniciado')
+        # Busca no banco de dados todos os transportes com status "Não iniciado"
+        lista_transportes = consultar_transporte_por_status('Não iniciado')
 
-    # Se o retorno de transportes do banco de dados for vazio, informa ao usuário uma mensagem
-    if len(lista_transportes) > 0:
-        # Efetua a consulta de todos os produtos, origens e destinos vinculados aos transportes criados e retorna uma lista dos mesmos
-        lista_produtos = consultar_dados_produto(lista_transportes)
-        lista_origem = consultar_dados_origem(lista_transportes)
-        lista_destino = consultar_dados_destino(lista_transportes)
+        if len(lista_transportes) > 0:
+            # Efetua a consulta de todos os produtos, origens e destinos vinculados aos transportes 'Não iniciado' criados e retorna uma lista dos mesmos
+            lista_produtos = consultar_dados_produto(lista_transportes)
+            lista_origem = consultar_dados_origem(lista_transportes)
+            lista_destino = consultar_dados_destino(lista_transportes)
 
-        # Combina os dados da Lista de transporte, produto, origem e destino em uma único dicionário
-        lista_transportes_produtos_origem_destino = combinar_dados(
-            lista_transportes, lista_produtos, lista_origem, lista_destino)
+            # Combina os dados da Lista de transporte, produto, origem e destino em uma único dicionário
+            lista_transportes_produtos_origem_destino = combinar_dados(
+                lista_transportes, lista_produtos, lista_origem, lista_destino)
 
-        # Exibi os dados de forma estruturada usando pandas
-        exibir_dados_estruturado(lista_transportes_produtos_origem_destino)
+            # Exibi os todos os dados de forma estruturada usando prettytable
+            exibir_dados_estruturado_resumido(
+                lista_transportes_produtos_origem_destino)
 
-        # Cria uma lista de Ids dos transportes que consta com status "Não iniciado"
-        lista_ids_transportes = []
-        for transporte in lista_transportes:
-            transporte_id = transporte.get("id_transporte")
-            lista_ids_transportes.append(transporte_id)
+            # Exibi opcoes para mostrar detalhes, iniciar transporte ou sair
+            opcao_selecionada = opcoes_apos_consulta('Não iniciado')
 
-        # Solicita e valida o ID do transporte para atualizar status
-        id_transporte = selecionar_id_transporte(lista_ids_transportes)
+            if opcao_selecionada == 'detalhes':
+                # Cria uma lista de Ids baseado na lista de transportes, onde o conteúdo dessa lista será todos os IDs de transportes recuperados do banco de dados
+                lista_ids_transportes = []
+                for transporte in lista_transportes:
+                    transporte_id = transporte.get("id_transporte")
+                    lista_ids_transportes.append(transporte_id)
 
-        # Alteração do status do transporte para Em andamento
-        status_transporte = 'Em andamento'
+                # Solicita e valida o ID do transporte para atualizar status
+                id_transporte = selecionar_id_transporte_para_mais_detalhes(
+                    lista_ids_transportes)
 
-        # Atualiza o status no banco de dados
-        confirmacao_atualizacao_status = atualizar_status_transporte(
-            id_transporte, status_transporte)
+                # Obtém e exibi os detalhes dos dados da produtora e do comprador agricola na forma de tabela
+                obter_detalhes_produtor_comprador(
+                    id_transporte, lista_transportes_produtos_origem_destino)
 
-        if confirmacao_atualizacao_status:
-            print(f"""\n✅   Status do transporte com o ID número {
-                  id_transporte} atualizado para '{status_transporte}'""")
+                input(
+                    f'\n⚠️   Clique em [ENTER] para retornar ao menu.')
+
+            elif opcao_selecionada == 'iniciar transporte':
+                # Cria uma lista de Ids dos transportes que consta com status "Não iniciado"
+                lista_ids_transportes = []
+                for transporte in lista_transportes:
+                    transporte_id = transporte.get("id_transporte")
+                    lista_ids_transportes.append(transporte_id)
+
+                # Solicita e valida o ID do transporte para atualizar status
+                id_transporte = selecionar_id_transporte(lista_ids_transportes)
+
+                # Alteração do status do transporte para Em andamento
+                status_transporte = 'Em andamento'
+
+                # Atualiza o status no banco de dados
+                confirmacao_atualizacao_status = atualizar_status_transporte(
+                    id_transporte, status_transporte)
+
+                if confirmacao_atualizacao_status:
+                    print(f"""\n✅   Status do transporte com o ID número {
+                        id_transporte} atualizado para '{status_transporte}'""")
+                    input(f'\n⚠️   Clique em [ENTER] para retornar ao menu.')
+
+                else:
+                    print(f'\n🚫  Status não atualizado, tente novamente.')
+                    input(f'\n⚠️   Clique em [ENTER] para retornar ao menu.')
+
+            elif opcao_selecionada == 'sair':
+                break
 
         else:
-            print(f'\n🚫  Status não atualizado, tente novamente.')
-
-    else:
-        return print('↘️   Nenhum transporte "registrado" ou com status "Não iniciado".')
+            return print('↘️   Nenhum transporte registrado.')
 
 
 def alterar_status_transporte() -> None:
@@ -238,7 +267,7 @@ def consultar_todos_transportes() -> None:
                 lista_transportes_produtos_origem_destino)
 
             # Exibi opcoes para mostrar detalhes ou sair
-            opcao_selecionada = opcoes_apos_consulta()
+            opcao_selecionada = opcoes_apos_consulta('Todos')
 
             if opcao_selecionada == 'detalhes':
                 # Cria uma lista de Ids baseado na lista de transportes, onde o conteúdo dessa lista será todos os IDs de transportes recuperados do banco de dados
@@ -252,9 +281,11 @@ def consultar_todos_transportes() -> None:
                     lista_ids_transportes)
 
                 # Obtém e exibi os detalhes dos dados da produtora e do comprador agricola na forma de tabela
-                obter_detalhes_produtor_comprador(id_transporte, lista_transportes_produtos_origem_destino)
-                
-                input(f'\n⚠️   Clique em [ENTER] para retornar ao menu consulta.')
+                obter_detalhes_produtor_comprador(
+                    id_transporte, lista_transportes_produtos_origem_destino)
+
+                input(
+                    f'\n⚠️   Clique em [ENTER] para retornar ao menu consulta.')
 
             elif opcao_selecionada == 'sair':
                 break

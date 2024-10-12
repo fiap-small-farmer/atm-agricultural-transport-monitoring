@@ -1,7 +1,7 @@
-import pandas as pd
 from prettytable import PrettyTable
 
 from models.validacao_dados import verificar_valor_na_lista
+
 
 def exibir_dados_estruturado_resumido(lista_transportes_produtos_origem_destino: list) -> None:
     # Definir o espaço fixo para as colunas
@@ -17,72 +17,105 @@ def exibir_dados_estruturado_resumido(lista_transportes_produtos_origem_destino:
 
     for transporte_produto in lista_transportes_produtos_origem_destino:
         table.add_row([
-            str(transporte_produto.get('id_transporte')).ljust(espaco_fixo)[:espaco_fixo],
-            transporte_produto.get('status_transporte').ljust(espaco_fixo)[:espaco_fixo],
+            str(transporte_produto.get('id_transporte')).ljust(
+                espaco_fixo)[:espaco_fixo],
+            transporte_produto.get('status_transporte').ljust(
+                espaco_fixo)[:espaco_fixo],
             transporte_produto.get('produto').ljust(espaco_fixo)[:espaco_fixo],
-            str(transporte_produto.get('quantidade')).ljust(espaco_fixo)[:espaco_fixo],
-            transporte_produto.get('und_transporte').ljust(espaco_fixo)[:espaco_fixo],
+            str(transporte_produto.get('quantidade')).ljust(
+                espaco_fixo)[:espaco_fixo],
+            transporte_produto.get('und_transporte').ljust(
+                espaco_fixo)[:espaco_fixo],
             str(transporte_produto.get('temp_monitorada'))if transporte_produto.get(
-                    'temp_monitorada') is not None else 'Não monitorado'.ljust(espaco_fixo)[:espaco_fixo],
-            transporte_produto.get('nome_produtora').ljust(espaco_fixo)[:espaco_fixo],
-            transporte_produto.get('nome_comprador').ljust(espaco_fixo)[:espaco_fixo]
+                'temp_monitorada') is not None else 'Não monitorado'.ljust(espaco_fixo)[:espaco_fixo],
+            transporte_produto.get('nome_produtora').ljust(
+                espaco_fixo)[:espaco_fixo],
+            transporte_produto.get('nome_comprador').ljust(
+                espaco_fixo)[:espaco_fixo]
         ])
 
     print(table)
 
 
-def exibir_dados_estruturado_origem_destino(id_transporte: int, dados_origem: dict, dados_destino: dict) -> None:
+def exibir_dados_estruturado_origem_destino(id_transporte: int, dados_detalhes: int, dados_origem: dict, dados_destino: dict) -> None:
     # Definir o espaço fixo para as colunas
     espaco_fixo = 20
 
     # Criar uma nova tabela com os nomes das colunas
+    detalhes = PrettyTable()
+    detalhes.field_names = ['TEMP. MÍNIMA', 'TEMP. MÁXIMA',
+                            'INSTRUÇÕES', 'TIPO DE CAMINHÃO']
+    detalhes.align = 'l'
+    detalhes.add_row([
+        dados_detalhes.get('temp_minima').ljust(espaco_fixo)[:espaco_fixo],
+        dados_detalhes.get('temp_maxima').ljust(espaco_fixo)[:espaco_fixo],
+        dados_detalhes.get('instrucoes').ljust(espaco_fixo)[:espaco_fixo],
+        dados_detalhes.get('tipo_caminhao').ljust(espaco_fixo)[:espaco_fixo]
+    ])
+
+    # Criar uma nova tabela com os nomes das colunas
     origem = PrettyTable()
-    origem.field_names = ['PRODUTORA', 'CEP', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
-
-    # Definir alinhamento das colunas
-    origem.align = 'l'  # Alinhamento à esquerda
-
-    # Adicionar dados com espaço fixo
+    origem.field_names = ['PRODUTORA', 'CEP',
+                          'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
+    origem.align = 'l'
     origem.add_row([
-        dados_origem.get('nome_produtora', '').ljust(espaco_fixo)[:espaco_fixo],
+        dados_origem.get('nome_produtora', '').ljust(
+            espaco_fixo)[:espaco_fixo],
         dados_origem.get('cep_origem', '').ljust(espaco_fixo)[:espaco_fixo],
-        dados_origem.get('endereco_origem', '').ljust(espaco_fixo)[:espaco_fixo],
-        str(dados_origem.get('numero_origem', '')).ljust(espaco_fixo)[:espaco_fixo],
+        dados_origem.get('endereco_origem', '').ljust(
+            espaco_fixo)[:espaco_fixo],
+        str(dados_origem.get('numero_origem', '')).ljust(
+            espaco_fixo)[:espaco_fixo],
         dados_origem.get('cidade_origem', '').ljust(espaco_fixo)[:espaco_fixo],
         dados_origem.get('Estado_origem', '').ljust(espaco_fixo)[:espaco_fixo]
     ])
 
     # Criar uma nova tabela com os nomes das colunas
     destino = PrettyTable()
-    destino.field_names = ['COMPRADOR', 'CEP', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
-
-    # Definir alinhamento das colunas
-    destino.align = 'l'  # Alinhamento à esquerda
-
-    # Adicionar dados com espaço fixo
+    destino.field_names = ['COMPRADOR', 'CEP',
+                           'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
+    destino.align = 'l' 
     destino.add_row([
-        dados_destino.get('nome_comprador', '').ljust(espaco_fixo)[:espaco_fixo],
+        dados_destino.get('nome_comprador', '').ljust(
+            espaco_fixo)[:espaco_fixo],
         dados_destino.get('cep_destino', '').ljust(espaco_fixo)[:espaco_fixo],
-        dados_destino.get('endereco_destino', '').ljust(espaco_fixo)[:espaco_fixo],
-        str(dados_destino.get('numero_destino', '')).ljust(espaco_fixo)[:espaco_fixo],
-        dados_destino.get('cidade_destino', '').ljust(espaco_fixo)[:espaco_fixo],
-        dados_destino.get('Estado_destino', '').ljust(espaco_fixo)[:espaco_fixo]
+        dados_destino.get('endereco_destino', '').ljust(
+            espaco_fixo)[:espaco_fixo],
+        str(dados_destino.get('numero_destino', '')).ljust(
+            espaco_fixo)[:espaco_fixo],
+        dados_destino.get('cidade_destino', '').ljust(
+            espaco_fixo)[:espaco_fixo],
+        dados_destino.get('Estado_destino', '').ljust(
+            espaco_fixo)[:espaco_fixo]
     ])
 
     print(f'\n\n🟠  DETALHES DO TRANSPORTE ID: {id_transporte}\n\n')
-    print(f'🔵  ORIGEM:\n')
+    print(f'🔴  INSTRUÇÕES PARA TRANSPORTE:\n')
+    print(detalhes)
+    print(f'\n🔵  INFORMAÇÕES DE ORIGEM:\n')
     print(origem)
-    print(f'\n🟢  DESTINO:\n')
+    print(f'\n🟢  INFORMAÇÕES DE DESTINO:\n')
     print(destino)
 
 
-def opcoes_apos_consulta() -> str:
-    # Exibi as opcoes para escolha
-    print('\n↘️   Menu consulta:\n')
-    lista_opcoes_menu = (
-        ' 1 - Exibir mais detalhes',
-        ' 2 - Sair',
-    )
+def opcoes_apos_consulta(tipo: str) -> str:
+
+    if tipo == 'Todos':
+        # Exibi as opcoes para escolha
+        print('\n↘️   Menu consulta:\n')
+        lista_opcoes_menu = (
+            ' 1 - Exibir mais detalhes',
+            ' 2 - Sair',
+        )
+
+    elif tipo == 'Não iniciado':
+        # Exibi as opcoes para escolha
+        print('\n↘️   Menu transporte e monitoramento:\n')
+        lista_opcoes_menu = (
+            ' 1 - Exibir mais detalhes',
+            ' 2 - Iniciar entrega e monitoramento',
+            ' 3 - Sair',
+        )
 
     for opcao_menu in lista_opcoes_menu:
         print(opcao_menu)
@@ -103,53 +136,44 @@ def opcoes_apos_consulta() -> str:
                     print('\n🚫  Por favor, insira apenas dígitos.')
 
         finally:
-            match opcao:
-                case 1:
-                    return 'detalhes'
-                case 2:
-                    return 'sair'
-                case _:
-                    print(f'\n⚠️   Opção inválida, tente novamente.')
+            if tipo == 'Todos':
+                match opcao:
+                    case 1:
+                        return 'detalhes'
+                    case 2:
+                        return 'sair'
+                    case _:
+                        print(f'\n⚠️   Opção inválida, tente novamente.')
 
+            elif tipo == 'Não iniciado':
+                match opcao:
+                    case 1:
+                        return 'detalhes'
+                    case 2:
+                        return 'iniciar transporte'
+                    case 3:
+                        return 'sair'
+                    case _:
+                        print(f'\n⚠️   Opção inválida, tente novamente.')
 
+ 
 def selecionar_id_transporte_para_mais_detalhes(lista_ids_transportes: list) -> int:
-    # Solicita e válida o ID do transporte para atualizar status
-    try:
-        while True:
-            id_transporte = int(input(
-                f'\n➡️   Informe o ID do transporte para exibir mais "detalhes" da PRODUTORA e do COMPRADOR AGRÍCOLA: '))
+    # Solicita e valida o ID do transporte para atualizar status
+    while True:
+        id_transporte = input(
+            f'\n➡️   Informe o ID do transporte para exibir INSTRUÇÕES DE TRANSPORTE e INFORMAÇÕES de ORIGEM e DESTINO: ')
 
-            id_valido = verificar_valor_na_lista(
-                id_transporte, lista_ids_transportes)
+        # Verifica se a entrada não está vazia e se é um número
+        if id_transporte.isdigit():
+            id_transporte = int(id_transporte)
+            id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
 
             if id_valido:
                 break
             else:
                 print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
-
-    except:
-        while True:
-            if id_valido != 'not found':
-                id_transporte = input('\n⚠️   Digite uma opção válida: ')
-
-            else:
-                id_transporte = (input(
-                    f'\n➡️   Informe o ID do transporte para exibir mais "detalhes" da PRODUTORA e do COMPRADOR AGRÍCOLA: '))
-
-            if id_transporte.isdigit():
-                id_transporte = int(id_transporte)
-
-                id_valido = verificar_valor_na_lista(
-                    id_transporte, lista_ids_transportes)
-
-                if id_valido:
-                    break
-                else:
-                    print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
-                    id_valido = 'not found'
-
-            else:
-                print('\n🚫  Por favor, insira apenas dígitos.')
+        else:
+            print('\n🚫  Por favor, insira apenas dígitos e não deixe o campo vazio.')
 
     return id_transporte
 
@@ -175,5 +199,13 @@ def obter_detalhes_produtor_comprador(id_transporte: int, lista_transportes: lis
                 'Estado_destino': transporte.get('Estado_destino')
             }
 
+            dados_detalhes = {
+                'temp_minima': transporte.get('temp_minima'),
+                'temp_maxima': transporte.get('temp_maxima'),
+                'instrucoes': transporte.get('instrucoes'),
+                'tipo_caminhao': transporte.get('tipo_caminhao'),
+            }
+
     # Exibi os dados do produtor e comprador de forma estruturada
-    exibir_dados_estruturado_origem_destino(id_transporte, dados_origem,  dados_destino)
+    exibir_dados_estruturado_origem_destino(
+        id_transporte, dados_detalhes, dados_origem,  dados_destino)

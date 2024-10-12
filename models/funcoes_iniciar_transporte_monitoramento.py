@@ -1,6 +1,6 @@
 from models.funcoes_dataBase import consultar_produto, consultar_origem, consultar_destino
 from models.validacao_dados import verificar_valor_na_lista
-import pandas as pd
+from prettytable import PrettyTable
 
 
 def consultar_dados_produto(lista_transportes: list) -> list:
@@ -52,78 +52,73 @@ def consultar_dados_destino(lista_transportes: list) -> list:
 
 
 def exibir_dados_estruturado(lista_transportes_produtos_origem_destino: list) -> None:
+    print('+-----------------------------------------------------------------------------------------------------------------------------------------------------+')
+
     for transporte_produto in lista_transportes_produtos_origem_destino:
-        dados_transporte_produto = {
-            'Parâmetro': ['ID TRANSPORTE', 'Status', 'Temperatura de Monitoramento ºc', 'Produto', 'Quantidade', 'Unidade de Transporte', 'Tipo de Caminhão', 'Instruções de Transporte'],
-            'Valor': [
-                transporte_produto.get('id_transporte'),
-                transporte_produto.get('status_transporte'),
-                transporte_produto.get('temp_monitorada') if transporte_produto.get(
-                    'temp_monitorada') is not None else 'N/A',
-                transporte_produto.get('produto'),
-                transporte_produto.get('quantidade'),
-                transporte_produto.get('und_transporte'),
-                transporte_produto.get('tipo_caminhao'),
-                transporte_produto.get('instrucoes')
-            ]
-        }
+        # Criar uma nova tabela com os nomes das colunas
+        table_transporte_produto = PrettyTable()
+        table_transporte_produto.field_names = [
+            'ID TRANSPORTE', 'STATUS', 'TEMP. MONIT. (ºC)', 'PRODUTO', 'QTD', 'UND. DE TRANSPORTE', 'TIPO DE CAMINHÃO', 'INSTRUÇÕES DE TRANSPORTE']
+        table_transporte_produto.align = 'l'
+        table_transporte_produto.add_row([
+            transporte_produto.get('id_transporte'),
+            transporte_produto.get('status_transporte'),
+            transporte_produto.get('temp_monitorada') if transporte_produto.get(
+                'temp_monitorada') is not None else 'N/A',
+            transporte_produto.get('produto'),
+            transporte_produto.get('quantidade'),
+            transporte_produto.get('und_transporte'),
+            transporte_produto.get('tipo_caminhao'),
+            transporte_produto.get('instrucoes')
+        ])
 
-        dados_transporte_origem = {
-            'Parâmetro': ['Nome Produtor', 'Cep', 'Endereço', 'Número', 'Cidade', 'Estado'],
-            'Valor': [
-                transporte_produto.get('nome_produtora'),
-                transporte_produto.get('cep_origem'),
-                transporte_produto.get('endereco_origem'),
-                transporte_produto.get('numero_origem'),
-                transporte_produto.get('cidade_origem'),
-                transporte_produto.get('Estado_origem')
-            ]
-        }
+        # Criar uma nova tabela com os nomes das colunas
+        table_origem = PrettyTable()
+        table_origem.field_names = [
+            'NOME PRODUTOR', 'CEP origem', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
+        table_origem.align = 'l'
+        table_origem.add_row([
+            transporte_produto.get('nome_produtora'),
+            transporte_produto.get('cep_origem'),
+            transporte_produto.get('endereco_origem'),
+            transporte_produto.get('numero_origem'),
+            transporte_produto.get('cidade_origem'),
+            transporte_produto.get('Estado_origem')
+        ])
 
-        dados_transporte_destino = {
-            'Parâmetro': ['Nome Comprador', 'Cep', 'Endereço', 'Número', 'Cidade', 'Estado'],
-            'Valor': [
-                transporte_produto.get('nome_comprador'),
-                transporte_produto.get('cep_destino'),
-                transporte_produto.get('endereco_destino'),
-                transporte_produto.get('numero_destino'),
-                transporte_produto.get('cidade_destino'),
-                transporte_produto.get('Estado_destino')
-            ]
-        }
-
-        # Estruturando os dados com pandas
-        transporte_produto_df = pd.DataFrame(dados_transporte_produto)
-        transporte_origem_df = pd.DataFrame(dados_transporte_origem)
-        transporte_destino_df = pd.DataFrame(dados_transporte_destino)
-
-        # Ajustar a largura para exibição completa
-        pd.set_option('display.width', 500)
+        table_destino = PrettyTable()
+        table_destino.field_names = [
+            'NOME COMPRADOR', 'CEP', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
+        table_destino.align = 'l'
+        table_destino.add_row([
+            transporte_produto.get('nome_comprador'),
+            transporte_produto.get('cep_destino'),
+            transporte_produto.get('endereco_destino'),
+            transporte_produto.get('numero_destino'),
+            transporte_produto.get('cidade_destino'),
+            transporte_produto.get('Estado_destino')
+        ])
 
         # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
-        print(f"\n🟠  DADOS DE TRANSPORTE:\n")
-        for index, row in transporte_produto_df.iterrows():
-            print(f"{row['Parâmetro']:<35} {row['Valor']:<35}")
+        print(f"\n🟠  DADOS DE TRANSPORTE: {
+              transporte_produto.get('id_transporte')}\n")
+        print(table_transporte_produto)
 
         print(f"\n🔵  LOCAL DE ORIGEM:\n")
-        for index, row in transporte_origem_df.iterrows():
-            print(f"{row['Parâmetro']:<35} {row['Valor']:<35}")
+        print(table_origem)
 
         print(f"\n🟢  LOCAL DESTINO:\n")
-        for index, row in transporte_destino_df.iterrows():
-            print(f"{row['Parâmetro']:<35} {row['Valor']:<35}")
+        print(table_destino)
 
-        print('\n----------------------------------------------------------')
+        print('\n+------------------------------------------------------------------------------------------------------------------------------------------------+')
 
 
 def combinar_dados(lista_transportes: list, lista_produtos: list, lista_origem: list, lista_destino: list) -> list:
     # Combina as listas de transportes com a lista de produtos, origem e destino
     # Prepara os dados para combinação
-    produtos_por_id = {produto['id_produto']
-        : produto for produto in lista_produtos}
+    produtos_por_id = {produto['id_produto']: produto for produto in lista_produtos}
     origens_por_id = {origem['id_origem']: origem for origem in lista_origem}
-    destinos_por_id = {destino['id_destino']
-        : destino for destino in lista_destino}
+    destinos_por_id = {destino['id_destino']: destino for destino in lista_destino}
 
     lista_transportes_produtos_origem_destino = []
 
@@ -152,40 +147,21 @@ def combinar_dados(lista_transportes: list, lista_produtos: list, lista_origem: 
 
 
 def selecionar_id_transporte(lista_ids_transportes: list) -> int:
-    # Solicita e válida o ID do transporte para atualizar status
-    try:
-        while True:
+    # Solicita e valida o ID do transporte para atualizar status
+    while True:
+        try:
             id_transporte = int(input(
                 f'\n➡️   Informe o ID do transporte para iniciar a entrega e o monitoramento: '))
-            
-            id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
+        except ValueError:
+            print('\n🚫  Por favor, insira apenas dígitos.')
+            continue
 
-            if id_valido:
-                break
-            else:
-                print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
+        id_valido = verificar_valor_na_lista(
+            id_transporte, lista_ids_transportes)
 
-    except:
-        while True:
-            if id_valido != 'not found':
-              id_transporte = input('\n⚠️   Digite uma opção válida: ')
-
-            else:
-              id_transporte = (input(
-              f'\n➡️   Informe o ID do transporte para iniciar a entrega e o monitoramento: ')) 
-
-            if id_transporte.isdigit():
-                id_transporte = int(id_transporte)
-
-                id_valido = verificar_valor_na_lista(id_transporte, lista_ids_transportes)
-
-                if id_valido:
-                    break
-                else:
-                    print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
-                    id_valido = 'not found'
-
-            else:
-                print('\n🚫  Por favor, insira apenas dígitos.')
+        if id_valido:
+            break
+        else:
+            print(f'\n⚠️   Id de transporte não encontrado, tente novamente.')
 
     return id_transporte
