@@ -1,6 +1,7 @@
+from prettytable import PrettyTable
+
 from models.funcoes_dataBase import consultar_produto, consultar_origem, consultar_destino
 from models.validacao_dados import verificar_valor_na_lista
-from prettytable import PrettyTable
 
 
 def consultar_dados_produto(lista_transportes: list) -> list:

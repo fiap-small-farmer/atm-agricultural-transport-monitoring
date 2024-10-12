@@ -353,3 +353,30 @@ def atualizar_status_transporte(id_transporte: int, status: str) -> bool:
             f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO STATUS ORACLE DATABASE {erro}')
 
         return False
+
+def atualizar_temperatura_monitorada_banco_dados(lista_temp_monitorada: list) -> bool:
+    # Captura os dados para atualização
+    id_transporte = lista_temp_monitorada.get('id_transporte')
+    temperatura_Monitorada = lista_temp_monitorada.get('temp_media_monitorada')
+
+
+    # Atualiza o status do transporte mediante ao status passado como parâmetro
+    try:
+        # Instrução SQL para atualizar o status pelo Id do transporte
+        registro = f"""
+            UPDATE Transporte
+            SET Temperatura_Monitorada = :temp_media
+            WHERE ID_Transporte = :id_transporte
+            """
+
+        # Executa a atualização com as instruções do registro
+        inst_atualizar.execute(registro, {"temp_media": temperatura_Monitorada, "id_transporte": id_transporte})
+        conn.commit()
+
+        return True
+
+    except Exception as erro:
+        input(
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO STATUS ORACLE DATABASE {erro}')
+
+        return False

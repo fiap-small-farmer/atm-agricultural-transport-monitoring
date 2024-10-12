@@ -43,12 +43,13 @@ def exibir_dados_estruturado_origem_destino(id_transporte: int, dados_detalhes: 
 
     # Criar uma nova tabela com os nomes das colunas
     detalhes = PrettyTable()
-    detalhes.field_names = ['TEMP. MÍNIMA', 'TEMP. MÁXIMA',
+    detalhes.field_names = ['TEMP. MÍNIMA ºC', 'TEMP. MÁXIMA ºC', 'TEMP. MONITORADA ºC',
                             'INSTRUÇÕES', 'TIPO DE CAMINHÃO']
     detalhes.align = 'l'
     detalhes.add_row([
         dados_detalhes.get('temp_minima').ljust(espaco_fixo)[:espaco_fixo],
         dados_detalhes.get('temp_maxima').ljust(espaco_fixo)[:espaco_fixo],
+        str(dados_detalhes.get('temp_monitorada'))if dados_detalhes.get('temp_monitorada') is not None else 'Não monitorado'.ljust(espaco_fixo)[:espaco_fixo],
         dados_detalhes.get('instrucoes').ljust(espaco_fixo)[:espaco_fixo],
         dados_detalhes.get('tipo_caminhao').ljust(espaco_fixo)[:espaco_fixo]
     ])
@@ -223,9 +224,11 @@ def obter_detalhes_produtor_comprador(id_transporte: int, lista_transportes: lis
             dados_detalhes = {
                 'temp_minima': transporte.get('temp_minima'),
                 'temp_maxima': transporte.get('temp_maxima'),
+                'temp_monitorada': transporte.get('temp_monitorada'),
                 'instrucoes': transporte.get('instrucoes'),
                 'tipo_caminhao': transporte.get('tipo_caminhao'),
             }
+
 
     # Exibi os dados do produtor e comprador de forma estruturada
     exibir_dados_estruturado_origem_destino(
