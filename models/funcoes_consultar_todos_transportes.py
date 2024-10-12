@@ -130,7 +130,7 @@ def opcoes_apos_consulta(tipo: str) -> str:
     for opcao_menu in lista_opcoes_menu:
         print(opcao_menu)
 
-    # Solicita ao usuário a opção de alterar o status para "Concluído" ou  "Cancelado"
+    # Solicita ao usuário qual opcao escolhida
     while True:
         try:
             opcao = int(input(f'\n➡️   Selecione uma opção: '))

@@ -1,6 +1,6 @@
 import os
-
 from datetime import datetime
+
 from models.funcoes_dataBase import consultar_transporte_por_status
 from models.funcoes_iniciar_transporte_monitoramento import consultar_dados_produto
 
@@ -33,10 +33,10 @@ def consulta_dados() -> list:
 
 def data_hora_ptbr() -> str:
     # Captura a data e hora atuais
-    agora = datetime.now()
+    data_hora_local = datetime.now()
 
     # Formata a data e hora no formato pt-BR
-    data_hora_formatada = agora.strftime('%d/%m/%Y - %H:%M:%S')
+    data_hora_formatada = data_hora_local.strftime('%d/%m/%Y - %H:%M:%S')
 
     return data_hora_formatada
 
@@ -98,10 +98,8 @@ def calcular_media_temperatura_por_id(id_transporte, nome_arquivo):
                         # Adiciona a temperatura à lista
                         temperaturas.append(temperatura)
                         count += 1
-                    except (IndexError, ValueError) as e:
+                    except (IndexError, ValueError) as erro:
                         # Ignora a linha se houver erro ao processá-la
-                        print(f"Erro ao processar a linha: {
-                              line.strip()} - Erro: {e}")
                         continue
 
     # Calcula a média das temperaturas, se houver temperaturas capturadas

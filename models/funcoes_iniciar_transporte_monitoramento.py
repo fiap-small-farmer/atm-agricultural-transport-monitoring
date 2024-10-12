@@ -52,68 +52,6 @@ def consultar_dados_destino(lista_transportes: list) -> list:
     return lista_destino
 
 
-def exibir_dados_estruturado(lista_transportes_produtos_origem_destino: list) -> None:
-    print('+-----------------------------------------------------------------------------------------------------------------------------------------------------+')
-
-    for transporte_produto in lista_transportes_produtos_origem_destino:
-        # Criar uma nova tabela com os nomes das colunas
-        table_transporte_produto = PrettyTable()
-        table_transporte_produto.field_names = [
-            'ID TRANSPORTE', 'STATUS', 'TEMP. MONIT. (ºC)', 'PRODUTO', 'QTD', 'UND. DE TRANSPORTE', 'TIPO DE CAMINHÃO', 'INSTRUÇÕES DE TRANSPORTE']
-        table_transporte_produto.align = 'l'
-        table_transporte_produto.add_row([
-            transporte_produto.get('id_transporte'),
-            transporte_produto.get('status_transporte'),
-            transporte_produto.get('temp_monitorada') if transporte_produto.get(
-                'temp_monitorada') is not None else 'N/A',
-            transporte_produto.get('produto'),
-            transporte_produto.get('quantidade'),
-            transporte_produto.get('und_transporte'),
-            transporte_produto.get('tipo_caminhao'),
-            transporte_produto.get('instrucoes')
-        ])
-
-        # Criar uma nova tabela com os nomes das colunas
-        table_origem = PrettyTable()
-        table_origem.field_names = [
-            'NOME PRODUTOR', 'CEP origem', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
-        table_origem.align = 'l'
-        table_origem.add_row([
-            transporte_produto.get('nome_produtora'),
-            transporte_produto.get('cep_origem'),
-            transporte_produto.get('endereco_origem'),
-            transporte_produto.get('numero_origem'),
-            transporte_produto.get('cidade_origem'),
-            transporte_produto.get('Estado_origem')
-        ])
-
-        table_destino = PrettyTable()
-        table_destino.field_names = [
-            'NOME COMPRADOR', 'CEP', 'ENDEREÇO', 'NÚMERO', 'CIDADE', 'ESTADO']
-        table_destino.align = 'l'
-        table_destino.add_row([
-            transporte_produto.get('nome_comprador'),
-            transporte_produto.get('cep_destino'),
-            transporte_produto.get('endereco_destino'),
-            transporte_produto.get('numero_destino'),
-            transporte_produto.get('cidade_destino'),
-            transporte_produto.get('Estado_destino')
-        ])
-
-        # Exibindo os DataFrames em formato de tabela com alinhamento à esquerda
-        print(f"\n🟠  DADOS DE TRANSPORTE: {
-              transporte_produto.get('id_transporte')}\n")
-        print(table_transporte_produto)
-
-        print(f"\n🔵  LOCAL DE ORIGEM:\n")
-        print(table_origem)
-
-        print(f"\n🟢  LOCAL DESTINO:\n")
-        print(table_destino)
-
-        print('\n+------------------------------------------------------------------------------------------------------------------------------------------------+')
-
-
 def combinar_dados(lista_transportes: list, lista_produtos: list, lista_origem: list, lista_destino: list) -> list:
     # Combina as listas de transportes com a lista de produtos, origem e destino
     # Prepara os dados para combinação

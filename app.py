@@ -15,12 +15,11 @@ monitoramento_event = threading.Event()
 # Função para monitoramento da temperatura simulando sensor de temperatura
 def monitoramento_temperatura():
     while not monitoramento_event.is_set():  # Verifica se o evento foi sinalizado
-        time.sleep(3)  # Espera 3 segundos antes de imprimir novamente
-
+        time.sleep(3)  # Espera 3 segundos antes e chama o evento
         # Valor em porcentagem (%) que pode sair fora dos limites mínimos e máximo de temperatura
         tolerancia_desvio_sensor_temperatura = 10
         
-        #Função que consulta os IDs de transporte em Andamento e retorna uma lista desses ids combinado com os produtos on consta as informações de temp min e max
+        #Função que consulta os IDs de transporte em Andamento e retorna uma lista desses ids combinado com os produtos onde consta as informações de temp min e max
         lista_transportes_produtos = consulta_dados()
 
         # Loop para executar as ações de monitoramento mediante a lista retornada

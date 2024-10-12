@@ -209,7 +209,6 @@ def numero_endereco_localizacao() -> int:
 
 
 def dados_produtora_ou_comprador_agricola(tipo: str) -> str:
-    # Solicita o CEP até que um válido seja fornecido, encontrado e confirmado
     limpar_tela_e_exibir_titulo('--- 📦 REGISTRAR TRANSPORTE ---')
 
     # Captura e valida o nome do produtor

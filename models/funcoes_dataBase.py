@@ -193,7 +193,7 @@ def consultar_transporte_por_status(status: str) -> list:
             registro = """
                 SELECT * FROM Transporte
                 """
-            # Consulta na tabela transporte todos os dados que atende a condição da instrução
+            # Consulta na tabela transporte todos os dados
             inst_consultar.execute(registro)
 
         else:
@@ -201,7 +201,7 @@ def consultar_transporte_por_status(status: str) -> list:
             SELECT * FROM Transporte
             WHERE Status_Transporte = :status
             """
-            # Consulta na tabela transporte todos os dados que atende a condição da instrução
+            # Consulta na tabela transporte de todos os dados que atende a condição da instrução
             inst_consultar.execute(registro, {"status": status})
 
         # Recupera todos os dados que atendem à condição
@@ -354,13 +354,14 @@ def atualizar_status_transporte(id_transporte: int, status: str) -> bool:
 
         return False
 
+
 def atualizar_temperatura_monitorada_banco_dados(lista_temp_monitorada: list) -> bool:
     # Captura os dados para atualização
     id_transporte = lista_temp_monitorada.get('id_transporte')
     temperatura_Monitorada = lista_temp_monitorada.get('temp_media_monitorada')
 
 
-    # Atualiza o status do transporte mediante ao status passado como parâmetro
+    # Atualiza a média da temperatura
     try:
         # Instrução SQL para atualizar o status pelo Id do transporte
         registro = f"""
@@ -377,6 +378,6 @@ def atualizar_temperatura_monitorada_banco_dados(lista_temp_monitorada: list) ->
 
     except Exception as erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO STATUS ORACLE DATABASE {erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO DE ATUALIZAÇÃO TEMPERATURA DE MONITORAMENTO ORACLE DATABASE {erro}')
 
         return False

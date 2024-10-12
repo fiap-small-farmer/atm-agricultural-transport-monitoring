@@ -3,7 +3,7 @@ import os
 
 from models.procedimentos_menu import limpar_tela_e_exibir_titulo
 from models.funcoes_registrar_transporte import exibicao_e_selecao_categoria, exibicao_e_selecao_produtos, quantidade_para_transporte, solicitar_e_exibir_cep, dados_produtora_ou_comprador_agricola, numero_endereco_localizacao, data_frame_dados
-from models.funcoes_iniciar_transporte_monitoramento import consultar_dados_produto, consultar_dados_origem, consultar_dados_destino, exibir_dados_estruturado, combinar_dados, selecionar_id_transporte
+from models.funcoes_iniciar_transporte_monitoramento import consultar_dados_produto, consultar_dados_origem, consultar_dados_destino, combinar_dados, selecionar_id_transporte
 from models.funcoes_alterar_status_transporte import selecionar_id_transporte_atualizar_status, opcoes_status
 from models.funcoes_consultar_todos_transportes import exibir_dados_estruturado_resumido, selecionar_id_transporte_para_mais_detalhes, obter_detalhes_produtor_comprador, opcoes_apos_consulta
 from models.funcoes_dataBase import registro_dados, consultar_transporte_por_status, atualizar_status_transporte
@@ -278,7 +278,7 @@ def consultar_todos_transportes() -> None:
     while True:
         limpar_tela_e_exibir_titulo('--- 📝 CONSULTAR TODOS OS TRANSPORTES ---')
 
-        # Busca no banco de dados todos os transportes com status "Não iniciado"
+        # Busca no banco de dados todos os transportes
         lista_transportes = consultar_transporte_por_status('todos')
 
         if len(lista_transportes) > 0:
