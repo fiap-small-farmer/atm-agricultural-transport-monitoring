@@ -123,7 +123,7 @@ git clone https://github.com/fiap-small-farmer/atm-agricultural-transport-monito
 ```
 
 - Acesse o arquivo .env.example dentro do projeto e renomeie para .env
-- Insira dentro do arquivo .env seguindo o exemplo abaixo, o mesmo nome de usuário, senha e dados relacionados ao DNS configurados no banco de dados, segue exemplo abaixo:
+- Insira dentro do arquivo .env seguindo o exemplo abaixo, o mesmo nome de usuário, senha e dados relacionados ao DNS configurados no banco de dados.
 
 ```PowerShell
     USER=rmxxxxxx
