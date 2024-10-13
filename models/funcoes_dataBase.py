@@ -29,7 +29,7 @@ def conexao_banco_de_dados() -> bool:
 
     except Exception as Erro:
         input(
-            f'\n☛  Aperte [ENTER] para continuar\n\nERRO ORACLE DATABASE {Erro}')
+            f'\n☛  Aperte [ENTER] para continuar\n\nERRO CONEXÃO ORACLE DATABASE {Erro}')
         conexao = False
         return conexao
 
