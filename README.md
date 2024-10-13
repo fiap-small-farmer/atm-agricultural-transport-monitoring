@@ -9,7 +9,7 @@
 
 # SISTEMA A.T.M (Agricultural Transport Monitoring)
 
-## Grupo 6
+## Grupo 8
 
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/a1exlima/">Alex da Silva Lima</a>
