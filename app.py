@@ -63,7 +63,7 @@ def monitoramento_temperatura():
 
 def menu() -> None:
 
-    print(' --- 🚚 SMALL FARMER TRACKING 🚚 ---\n')
+    print(' --- 🌡️   AGRICULTURAL TRANSPORT MONITORING 🚚 ---\n')
 
     lista_opcoes_menu = (
         ' 1 - Registrar transporte',
@@ -99,7 +99,7 @@ def opcoes_menu() -> None:
             case 5:
                 monitoramento_event.set()  # Sinaliza para parar o monitoramento
                 limpar_terminal()
-                print('⚠️   SMALL FARMER TRACKING encerrado com sucesso!\n')
+                print('⚠️   AGRICULTURAL TRANSPORT MONITORING encerrado com sucesso!\n')
                 sys.exit()
 
             case _:
