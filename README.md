@@ -72,7 +72,7 @@ de execução de maneira segura.
 
 - <b>app.py</b>: O arquivo principal do projeto, onde está implementado o código base da aplicação em Python.
 
-- <b>log_monitoramento_transporte.txt</b>: Arquivo de texto que registra todos os logs gerados pelo simulador de sensor de temperatura.
+- <b>log_monitoramento_transporte.txt</b>: Arquivo de texto que registra todos os logs gerados pelo simulador de sensor de temperatura. (É gerado após o usuário alterar status para andamento.)
 
 - <b>README.md</b>: Arquivo de documentação em formato Markdown que serve como guia e explicação geral sobre o projeto.
 
@@ -99,7 +99,7 @@ git clone https://github.com/fiap-small-farmer/atm-agricultural-transport-monito
   
 <br>
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="public/imagens/config_conexao_db.png" alt="FIAP - Faculdade de Informática e Admnistração Paulista" border="0" width=40% height=40%></a>
+<img src="public/imagens/config_conexao_db.png" alt="FIAP - Faculdade de Informática e Admnistração Paulista" border="0" width=60% height=60%>
 </p>
 
 - Siga os passos:
@@ -123,7 +123,7 @@ git clone https://github.com/fiap-small-farmer/atm-agricultural-transport-monito
 ```
 
 - Acesse o arquivo .env.example dentro do projeto e renomeie para .env
-- Insira dentro do arquivo .env seguindo o exemplo abaixo, o mesmo nome de usuário e senha configurados no banco de dados e dados relacionados os DNS.
+- Insira dentro do arquivo .env seguindo o exemplo abaixo, o mesmo nome de usuário, senha e dados relacionados ao DNS configurados no banco de dados, segue exemplo abaixo:
 
 ```PowerShell
     USER=rmxxxxxx
@@ -144,7 +144,7 @@ cd atm-agricultural-transport-monitoring
 Execute os comandos:
 
 ```PowerShell
-# Cria um ambiente virtual isolado para projetos Python, permitindo gerenciar dependências separadamente.
+# Cria um ambiente virtual isolado para projetos Python, gerencia dependências separadamente.
 
 py -m venv venv
 ```
