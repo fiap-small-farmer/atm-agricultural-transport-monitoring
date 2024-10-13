@@ -94,7 +94,7 @@ git clone https://github.com/fiap-small-farmer/atm-agricultural-transport-monito
 - Usaremos o Oracle Database XE em conjunto com a ferramenta de desenvolvimento Oracle SQL Developer 23.1.1 para criação do banco de dados, caso NÃO tenha instalado ainda em sua máquina, acesse os links abaixo e execute a instalação.
 
 - <a href="https://www.oracle.com/br/database/technologies/xe-downloads.html">Oracle Database XE: Versão gratuita e leve do Oracle Database, ideal para desenvolvimento, implantação e distribuição.</a>
-- <a href="https://www.oracle.com/br/database/technologies/xe-downloads.html">SQL Developer 23.1.1: Ferramenta de desenvolvimento que facilita a conexão, consulta, administração e manipulação de dados de forma visual e interativa.</a>
+- <a href="https://www.oracle.com/database/sqldeveloper/technologies/download/">SQL Developer 23.1.1: Ferramenta de desenvolvimento que facilita a conexão, consulta, administração e manipulação de dados de forma visual e interativa.</a>
 - Após a instalação, acesse o Oracle SQL Developer, no canto superior esquerdo, clique no sinal de + em verde e configure uma nova conexão, seguindo o exemplo abaixo:
   
 <br>
