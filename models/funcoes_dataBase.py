@@ -5,7 +5,6 @@ import oracledb
 from models.procedimentos_menu import limpar_terminal
 from models.validacao_dados import verificar_valores_nulos
 
-
 def conexao_banco_de_dados() -> bool:
     load_dotenv()
     usuario = os.getenv('USER')
